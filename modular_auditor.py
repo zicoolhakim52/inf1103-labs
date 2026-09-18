@@ -1,25 +1,36 @@
+#Functions
+def get_valid_input():
+    #variable holds command
+    userInput = input("Please enter a valid number or 'quit' to exit: ")
+    #Handles invalid input, enforce buisness rules
+    if userInput=="quit":
+        return("quit")
+    elif userInput.isdigit() == False:
+        return("invalid")
+    else:
+        return(userInput)
+
+
 #variable holds inventory
 inventory = 0
-#variable holds command
-userInput = input("Please enter a valid number or 'quit' to exit: ")
+
 #Rejected entries count
 Rcount=0
 
-while userInput != "quit":
-
-    #Handles invalid input, enforce buisness rules
-    if userInput.isdigit() == False: 
+while True:
+    userInput= get_valid_input()
+    if userInput== "quit":
+        break
+    elif userInput == "invalid":
         Rcount+=1
-        userInput = input("\nInvalid input. Please enter a valid number or 'quit' to exit: ")     
+        print("Invalid input")
     else:
-        #running total of inventory
         inventory += int(userInput)
-        print("Current inventory: ", inventory)
+        print("Stock added. Current Inventory: ", inventory)
         if inventory > 500:
             #trigger overstock alert
             print("\nALERT! Inventory limit reached.\nNo more stock can be added")
-            break
-        userInput = input("\nInput accepted. Please enter a valid number or 'quit' to exit: ")
+            break    
 
 
 print("\nYou have exited the inventory management system.")
