@@ -15,9 +15,16 @@ def process_delivery(current_total, new_value):
     current_total += int(new_value)
     return current_total
 
+#calculates 10% of delivery tax
 def calculate_tax(amount):
     amount=int(amount)*.10
     return amount
+
+#Prints out summary
+def generate_report(total_units, failed_attempts):
+    print("\nYou have exited the inventory management system.")
+    print("Total units processed: ", total_units)
+    print("Total rejected entries: ", failed_attempts)
 
 #variable holds inventory
 inventory = 0
@@ -32,8 +39,10 @@ while True:
         #trigger overstock alert
         userInput="quit"
         print("\nALERT! Inventory limit reached.\nNo more stock can be added")
+    #The only break condition to exit while loop
     if userInput== "quit":
         print("Total Tax on delivery is: ", calculate_tax(inventory))
+        generate_report(inventory,Rcount)
         break
     elif userInput == "invalid":
         Rcount+=1
@@ -45,6 +54,4 @@ while True:
                 
 
 
-print("\nYou have exited the inventory management system.")
-print("Total units processed: ", inventory)
-print("Total rejected entries: ", Rcount)
+
