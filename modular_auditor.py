@@ -10,6 +10,10 @@ def get_valid_input():
     else:
         return(userInput)
 
+def process_delivery(current_total, new_value):
+    current_total += int(new_value)
+    return current_total
+
 
 #variable holds inventory
 inventory = 0
@@ -25,7 +29,7 @@ while True:
         Rcount+=1
         print("Invalid input")
     else:
-        inventory += int(userInput)
+        inventory=process_delivery(inventory,int(userInput))
         print("Stock added. Current Inventory: ", inventory)
         if inventory > 500:
             #trigger overstock alert
