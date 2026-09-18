@@ -48,8 +48,9 @@ while True:
     if inventory < 500:
         userInput= get_valid_input()
         #checks if the total inventory will be more than 500
-        intentoryCheck=inventory
-        intentoryCheck+=int(userInput)
+        if userInput != "quit":
+            intentoryCheck=inventory
+            intentoryCheck+=int(userInput)
     else:
         #trigger overstock alert
         userInput="quit"
