@@ -12,14 +12,18 @@ def get_valid_input():
         userInput = input(inputStrList[index])
         #Selects the corresponding boolean condition based on the index
         if index==0:
-            inputCondition=userInput.isalpha() == False
+            inputCondition=not (all(char.isalpha() or char.isspace() for char in userInput))
         else:
             inputCondition=userInput.isdigit() == False
 
         while inputCondition and userInput !="quit":
             #how to count invalid input
             print("Invalid input")
-            userInput = input(errorMsgList[index])  
+            userInput = input(errorMsgList[index]) 
+            if index==0 and userInput.isalpha() == True:
+                inputCondition=False
+            elif index==1 and userInput.isdigit()==True:
+                inputCondition=False
             #Keep track of number of errors
             errorCount()
         #Handles invalid input, enforce buisness rules
@@ -54,46 +58,78 @@ def errorCount():
     return errorCount.count
 
 ##Opens inventory file. If file does not exist, creates a new inventory file
-def load_inventory():
+def load_inventory(inventoryQ):
     try:
         inventoryFile= open("inventory.txt",'r+')
+        #closes file
+        inventoryFile.close()
+        
+        ##Reads data from file
+        with open("inventory.txt",'r') as file:
+            data_output = file.readlines()
+        
+        ##
+        #prints loaded inventory
+        print("Current Orders:\n")
+        for item in data_output:
+            #removes \n
+            item=item[:-1]
+            print(item)
+        
+        #get inventory number of last items
+        for eachOrder in data_output:
+            tempSplit=eachOrder.split(",")
+            #Adds all the inventory quantity from list
+            inventoryQ+=int(tempSplit[-1])
+        
+            #Gets the last item from the inventory.txt
+            lastItem=data_output[-1]
+            lastItem=lastItem.split(",")
+            #Get the order number of the last item on the list
+            lastItemNumber=lastItem[0]
+        
+            
+        return([data_output,inventoryQ,lastItemNumber])
+
     except:
         inventoryFile= open("inventory.txt",'w+')
-    #closes file
-    inventoryFile.close()
+        #closes file
+        inventoryFile.close()
+        #empty file
+        return(0)
+    
+def save_inventory(sessionInputList,lastItemNumber):
+    print("New Order Added: ")
 
-    ##Reads data from file
-    with open("inventory.txt",'r+') as file:
-        data_output = file.readlines()
-    return(data_output)
-
-
+    with open("inventory.txt",'a') as file:
+        orderNumber=str(int(lastItemNumber)+1)
+        itemname=str(sessionInputList[0])
+        itemquantity=str(sessionInputList[1])
+        print(orderNumber+","+itemname+","+itemquantity+"\n")
+        file.write(orderNumber+", "+itemname+", "+itemquantity+"\n")
+    print("Order successfully saved to orders.txt")
+    
 
 #variable holds inventory quantity
 inventoryQ = 0
-#List of new input in this session
-sessionInputList=[]
-##loads inventory
-loaded_inventory=load_inventory()
+#order number of the last item on the list sets to 1001 if no file created before
+lastItemNumber=1000
+#History of last session
+historyInventory=[]
 
-#get inventory number of last items
-for eachOrder in loaded_inventory:
-    tempSplit=eachOrder.split(",")
-    #Adds all the inventory quantity from list
-    inventoryQ+=int(tempSplit[-1])
-
-#Gets the last item from the inventory.txt
-lastItem=loaded_inventory[-1]
-lastItem=lastItem.split(",")
-#Get the order number of the last item on the list
-lastItemNumber=lastItem[0]
-
-
+##loads inventory (inventory in list)
+loaded_inventory=load_inventory(inventoryQ)
+if loaded_inventory != 0:
+    historyInventory=loaded_inventory[0]
+    inventoryQ=int(loaded_inventory[1])
+    lastItemNumber=int(loaded_inventory[2])
 
 
 while True:
+
     if inventoryQ < 500:
         userInput= get_valid_input()
+
         #checks if the total inventory will be more than 500
         if userInput != "quit":
             intentoryCheck=inventoryQ
@@ -107,23 +143,19 @@ while True:
         print("Total Tax on delivery is: ", calculate_tax(inventoryQ))
         Rcount=errorCount()
         generate_report(inventoryQ,Rcount-1)
-        print(sessionInputList)
         #Writes new inputs to file
-        with open("inventory.txt",'r+') as file:
-            for index in len(sessionInputList):
-                file.write(str(int(lastItemNumber)+index)+", "+str(sessionInputList[index][0])+", "+str(sessionInputList[index][1])+"\n")
+        
         break
     else:
         if intentoryCheck >500:
             print("Stock not added. Current Inventory would be more than 500: ", intentoryCheck) 
         else:
             inventoryQ=process_delivery(inventoryQ,int(userInput[1]))
-            print("Stock added. Current Inventory: ", inventoryQ)
-            ##adds the valid input into the list
-            sessionInputList.append(userInput)
+            #print("Stock added. Current Inventory: ", inventoryQ)
+            #Saves the new input into the file
+            save_inventory(userInput,lastItemNumber)
 
-            
-    
+            lastItemNumber+=1
 
-
+           
 
