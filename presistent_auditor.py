@@ -10,12 +10,14 @@ def get_valid_input():
     #variable holds command
     for index in range(2):    #for loop for the the two items in the list [product name, quantity]
         userInput = input(inputStrList[index])
-        #Selects the corresponding boolean condition based on the index
+        #Selects the corresponding boolean condition based on the index. 
+        #If the input is valid, inputCondition is set False, if invalid, it is set to True
         if index==0:
             inputCondition=not (all(char.isalpha() or char.isspace() for char in userInput))
         else:
             inputCondition=userInput.isdigit() == False
 
+        #Enters the while loop when
         while inputCondition and userInput !="quit":
             #how to count invalid input
             print("Invalid input")
@@ -97,7 +99,7 @@ def load_inventory(inventoryQ):
         inventoryFile.close()
         #empty file
         return(0)
-    
+#Adds one order at a time
 def save_inventory(sessionInputList,lastItemNumber):
     print("New Order Added: ")
 
@@ -124,9 +126,9 @@ if loaded_inventory != 0:
     inventoryQ=int(loaded_inventory[1])
     lastItemNumber=int(loaded_inventory[2])
 
-
+#main loop
 while True:
-
+    #Prevents adding more than 500 Quantity
     if inventoryQ < 500:
         userInput= get_valid_input()
 
@@ -143,8 +145,6 @@ while True:
         print("Total Tax on delivery is: ", calculate_tax(inventoryQ))
         Rcount=errorCount()
         generate_report(inventoryQ,Rcount-1)
-        #Writes new inputs to file
-        
         break
     else:
         if intentoryCheck >500:
@@ -154,7 +154,7 @@ while True:
             #print("Stock added. Current Inventory: ", inventoryQ)
             #Saves the new input into the file
             save_inventory(userInput,lastItemNumber)
-
+            #Keep tract of count for Order number.
             lastItemNumber+=1
 
            
