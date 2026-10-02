@@ -27,37 +27,7 @@ def get_valid_input():
             print("Invalid option, Please type an option that is displayed")
             continue
     return(input_Option)    
-
     
-    '''
-    #variable holds command
-    for index in range(2):    #for loop for the the two items in the list [product name, quantity]
-        userInput = input(inputStrList[index])
-        #Selects the corresponding boolean condition based on the index. 
-        #If the input is valid, inputCondition is set False, if invalid, it is set to True
-        if index==0:
-            inputCondition=not (all(char.isalpha() or char.isspace() for char in userInput))
-        else:
-            inputCondition=userInput.isdigit() == False
-
-        #Enters the while loop when
-        while inputCondition and userInput !="quit":
-            #how to count invalid input
-            print("Invalid input")
-            userInput = input(errorMsgList[index]) 
-            if index==0 and userInput.isalpha() == True:
-                inputCondition=False
-            elif index==1 and userInput.isdigit()==True:
-                inputCondition=False
-            #Keep track of number of errors
-            errorCount()
-        #Handles invalid input, enforce buisness rules
-        if userInput=="quit":
-            return("quit")
-        #appends valid input into the list
-        inputList.append(userInput)'''
-
-    return(inputList)  #list would be [product name, quantity]
 
 #Adds new input to inventory
 def process_delivery(current_total, new_value):
@@ -115,12 +85,20 @@ def load_inventory(inventoryQuantity):
         return("Empty")
 
 #Adds one order at a time
-def save_inventory(current_inventory):
-    print("Saving inventory...")
+def save_inventory(current_inventory,num):
+    if num==5:
+        print("Saving inventory...")
+    else:
+        print("Saving inventory before exit...")
 
     with open("inventory.json",'w+') as file:
         json.dump(current_inventory, file,indent=1)
-    print("Inventory saved successfully to inventory.json.")
+
+    if num==5:
+        print("Inventory saved successfully to inventory.json.")
+    else:
+        print("Inventory saved successfully.")
+
 
 def display_all(current_inventory):
     print("Current Inventory\n"
@@ -130,7 +108,15 @@ def display_all(current_inventory):
         print("ID: ", item["ID"], " | Name: ", item["Name"], " Price: ", item["Price"], "Stock: ", item["Stock"])
     print("------------------------------------------------\n")
 
-def add_product(current_inventory):
+def stockOverflow(inventoryQuantity):
+    #if stock is over 500, the program prevents adding more
+    if inventoryQuantity>500:
+        resultQuantity=False
+    else:
+        resultQuantity=True
+    return(resultQuantity)
+
+def add_product(current_inventory,inventoryQuantity):
     #temp dictionary to add new items
     add_product_dictionary={}
     print("Add New Product\n")
@@ -138,13 +124,20 @@ def add_product(current_inventory):
     add_product_dictionary["ID"]= input("Product ID: ")
     add_product_dictionary["Name"]=input("Product Name: ")
     add_product_dictionary["Price"]=input("Price: ")
-    add_product_dictionary["Stock"]=input("Stock Quantity: ")
+    new_stock=input("Stock Quantity: ")
+    add_product_dictionary["Stock"]=new_stock
+    inventoryQuantity+=int(new_stock)
 
-    #Add to the current inventory list
-    current_inventory.append(add_product_dictionary)
+    result=stockOverflow(inventoryQuantity)
+    if result==True:
+        #Add to the current inventory list
+        current_inventory.append(add_product_dictionary)
+    else:
+        inventoryQuantity-=int(new_stock)
+        print("Quantity would go over 500. Item not added")
     return(current_inventory)
 
-def update_stock(current_inventory):
+def update_stock(current_inventory,inventoryQuantity):
     print("\nUpdate Stock\n")
 
     ID_lookup=input("Enter Product ID:")
@@ -155,10 +148,21 @@ def update_stock(current_inventory):
             if itemID==ID_lookup:
                 print("Name: ", item["Name"])
                 print("Current Stock: ", item["Stock"])
+                new_stock=input("New Stock Quantity: ")
+
+                inventoryQuantity+=int(new_stock)
+                result=stockOverflow(inventoryQuantity)
+                if result ==True:
+                    item["Stock"]=new_stock
+                    print("\nStock updated successfully!\n")
+                else:
+                    inventoryQuantity-=int(new_stock)
+                print("Quantity would go over 500. Item not added")
+
+
                 
-                item["Stock"]=input("New Stock Quantity: ")
             break
-    print("\nStock updated successfully!\n")
+    
     return(current_inventory)
 
 
@@ -218,14 +222,23 @@ while True:
         else:
             display_all(current_inventory)
     elif userInput==2:
-        current_inventory=add_product(current_inventory)
+        current_inventory=add_product(current_inventory,inventoryQuantity)
     elif userInput==3:
-        current_inventory=update_stock(current_inventory)
+        current_inventory=update_stock(current_inventory,inventoryQuantity)
     elif userInput==4:
         search_item=input("Enter Product ID: ")
         search_result=search_product(current_inventory,search_item,"print Item")
     elif userInput==5:
-        save_inventory(current_inventory)
+        save_inventory(current_inventory,"Manual Save")
+    elif userInput==6:
+        save_inventory(current_inventory,"Auto Save")
+        print("Thank you for using Inventory Management System.\n"
+        "Program terminated.")
+        break
+
+
+
+
         #checks if the total inventory will be more than 500
         #if userInput != "quit":
            # intentoryCheck=inventoryQuantity
