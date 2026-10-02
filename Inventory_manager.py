@@ -20,10 +20,11 @@ def get_valid_input():
     input_Option=""
 
     while type(input_Option)!=int:
-        input_Option=input("Enter option: ")
         try:
-            input_Option=int(input_Option)
-        except input_Option not in [1,2,3,4,5,6]:
+            input_Option=int(input("Enter option: "))
+            if input_Option not in [1,2,3,4,5,6]:
+                print("Invalid option, Please type an option that is displayed")
+        except:
             print("Invalid option, Please type an option that is displayed")
             continue
     return(input_Option)    
@@ -132,9 +133,10 @@ def add_product(current_inventory,inventoryQuantity):
     if result==True:
         #Add to the current inventory list
         current_inventory.append(add_product_dictionary)
+        print("\nProduct added successfully!\n")
     else:
         inventoryQuantity-=int(new_stock)
-        print("Quantity would go over 500. Item not added")
+        print("Quantity would go over 500. Item not added\n")
     return(current_inventory)
 
 def update_stock(current_inventory,inventoryQuantity):
@@ -148,26 +150,25 @@ def update_stock(current_inventory,inventoryQuantity):
             if itemID==ID_lookup:
                 print("Name: ", item["Name"])
                 print("Current Stock: ", item["Stock"])
+                old_stock=item["Stock"]
                 new_stock=input("New Stock Quantity: ")
 
-                inventoryQuantity+=int(new_stock)
+                inventoryQuantity=inventoryQuantity+int(new_stock) - int(old_stock)
                 result=stockOverflow(inventoryQuantity)
                 if result ==True:
                     item["Stock"]=new_stock
                     print("\nStock updated successfully!\n")
                 else:
-                    inventoryQuantity-=int(new_stock)
-                print("Quantity would go over 500. Item not added")
-
-
-                
-            break
+                    inventoryQuantity=inventoryQuantity- int(new_stock) + int(old_stock)
+                    print("Quantity would go over 500. Item not added")
+                break
     
     return(current_inventory)
 
 
 def search_product(*searchQureies):
     #current_inventory,ID_lookup,"print Item"/"update Item"
+    
     current_inventory, ID_lookup, actionRequired=searchQureies
     result="Product not found.\n"
     ID_exists=False
@@ -178,7 +179,7 @@ def search_product(*searchQureies):
             result="Product Found:\n"
             ID_exists=True
             break
-    if(actionRequired=="print Item"):
+    if(actionRequired=="print Item" and ID_exists==True):
         print("Product Found")
         print("------------------------------------------------")
         print("ID: ", selectedItem["ID"])
@@ -186,6 +187,7 @@ def search_product(*searchQureies):
         print("Price: ", selectedItem["Price"])
         print("Stock: ", selectedItem["Stock"])
         print("------------------------------------------------\n")
+                
     else:
         print(result)
 
@@ -226,6 +228,7 @@ while True:
     elif userInput==3:
         current_inventory=update_stock(current_inventory,inventoryQuantity)
     elif userInput==4:
+        print("\nSearch Product")
         search_item=input("Enter Product ID: ")
         search_result=search_product(current_inventory,search_item,"print Item")
     elif userInput==5:
