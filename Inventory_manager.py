@@ -8,47 +8,22 @@ class Product:
         self.__price = price
         self.__stock = stock
 
-    def update_stock(self,quantity):
-        self.__stock=quantity
 
     def display_information(self):
-        print(f"Product ID: {self.__productid}\t")
-        print(f"Name: {self.__name}\t")
-        print(f"Price: {self.__price}\t")
-        print(f"Stock: {self.__stock}\t")
+        print(f"ID: {self.__productid} | Name: {self.__name} Price: {self.__price} Stock: {self.__stock}")
 
-    def update_stock(self,current_inventory,inventoryQuantity):
-        print("\nUpdate Stock\n")
-
-        ID_lookup=input("Enter Product ID:")
-        search_result=Inventory.search_product(current_inventory,ID_lookup,"update Item")
-        if search_result==True:
-            for item in current_inventory:
-                itemID=item["ID"]
-                if itemID==ID_lookup:
-                    print("Name: ", item["Name"])
-                    print("Current Stock: ", item["Stock"])
-                    old_stock=item["Stock"]
-                    new_stock=input("New Stock Quantity: ")
-
-                    inventoryQuantity=inventoryQuantity+int(new_stock) - int(old_stock)
-                    result=stockOverflow(inventoryQuantity)
-                    if result ==True:
-                        item["Stock"]=new_stock
-                        self.__stock= new_stock
-                        print("\nStock updated successfully!\n")
-                    else:
-                        inventoryQuantity=inventoryQuantity- int(new_stock) + int(old_stock)
-                        print("Quantity would go over 500. Item not added")
-                    break
+    def update_stock(self):
+        self.__stock= new_stock
         
-        return(current_inventory)
 
 
 class Inventory:
     def __init__(self):
-        pass
-    def add_product(current_inventory,inventoryQuantity):
+        self.__inventory_list=[]
+
+    def add_product(self,product):
+        self.__inventory_list.append(product)
+        '''
         #temp dictionary to add new items
         add_product_dictionary={}
         print("Add New Product\n")
@@ -68,10 +43,18 @@ class Inventory:
         else:
             inventoryQuantity-=int(new_stock)
             print("Quantity would go over 500. Item not added\n")
-        return(current_inventory)
+        return(current_inventory)'''
 
 
-    def search_product(*searchQureies):
+    def search_product(self,searchID):
+        for product in self.__inventory_list:
+            if product.__productid==searchID:
+                product.Product.display_information()
+                return
+        print("Product not found")
+        
+
+        '''
         #current_inventory,ID_lookup,"print Item"/"update Item"
         current_inventory, ID_lookup, actionRequired=searchQureies
         result="Product not found.\n"
@@ -94,48 +77,96 @@ class Inventory:
         else:
             print(result)
 
-        return(ID_exists)
+        return(ID_exists)'''
 
         
-    def display_all(self,current_inventory):
+    def display_all(self):
         print("Current Inventory\n"
         "------------------------------------------------")
         #ID: P001 | Name: Laptop | Price: $1200.00 | Stock: 15
-        for item in current_inventory:
-            print("ID: ", item["ID"], " | Name: ", item["Name"], " Price: ", item["Price"], "Stock: ", item["Stock"])
+        for item in self.__inventory_list:
+            item.display_information()
         print("------------------------------------------------\n")
 
+class Main_Program:
+    def display_menu():
+        print("----------- MENU -----------\n"
+        "1. Display All Products\n" 
+        "2. Add Product\n" 
+        "3. Update Stock\n"
+        "4. Search Product\n"
+        "5. Save Inventory\n"
+        "6. Exit\n"
+        "----------------------------\n")
+    def get_valid_input():
+        #inputStrList=["Enter Product Name: ", "Enter Quantity: "]
+        #errorMsgList=["Please enter a valid Product Name or 'quit' to exit: ", "Please enter a valid quantity or 'quit' to exit: "]
+        inputList=[]
+        input_Option=""
+
+        while type(input_Option)!=int:
+            try:
+                input_Option=int(input("Enter option: "))
+                if input_Option not in [1,2,3,4,5,6]:
+                    print("Invalid option, Please type an option that is displayed")
+            except:
+                print("Invalid option, Please type an option that is displayed")
+                continue
+        return(input_Option)
+
+class File_Handling:
+    ##Opens inventory file. If file does not exist, creates a new inventory file
+    def load_inventory(inventoryQuantity):
+        try:
+            inventoryFile= open("inventory.json",'r+')
+            #closes file
+            inventoryFile.close()
+            print("inventory.json found.")
+            
+            ##Reads data from file
+            with open("inventory.json",'r') as file:
+                file_contents = json.load(file)
+
+
+            #Get amount of stock already in inventory
+            for item in file_contents:
+                inventoryQuantity+=int(item["Stock"])
+
+            #get inventory number of last items
+            lastItem=file_contents[-1]
+            #Get the order number of the last item on the list
+            lastItemID=lastItem["ID"]
+            lastItemID=int(lastItemID[-1])
+
+            print("Inventory loaded successfully.\n")
+            return([file_contents,inventoryQuantity,lastItemID])
+
+        except:
+            inventoryFile= open("inventory.json",'w+')
+            #closes file
+            inventoryFile.close()
+            #empty file
+            return("Empty")
+
+    #Adds one order at a time
+    def save_inventory(current_inventory,num):
+        if num==5:
+            print("Saving inventory...")
+        else:
+            print("Saving inventory before exit...")
+
+        if current_inventory!= "Empty":
+            with open("inventory.json",'w+') as file:
+                json.dump(current_inventory, file,indent=1)
+
+        if num==5:
+            print("Inventory saved successfully to inventory.json.")
+        else:
+            print("Inventory saved successfully.\n")
 
 #Functions
 
-def display_menu():
-    print("----------- MENU -----------\n"
-    "1. Display All Products\n" 
-    "2. Add Product\n" 
-    "3. Update Stock\n"
-    "4. Search Product\n"
-    "5. Save Inventory\n"
-    "6. Exit\n"
-    "----------------------------\n")
-
-
 #gets quantity of user input and validates it
-def get_valid_input():
-    #inputStrList=["Enter Product Name: ", "Enter Quantity: "]
-    #errorMsgList=["Please enter a valid Product Name or 'quit' to exit: ", "Please enter a valid quantity or 'quit' to exit: "]
-    inputList=[]
-    input_Option=""
-
-    while type(input_Option)!=int:
-        try:
-            input_Option=int(input("Enter option: "))
-            if input_Option not in [1,2,3,4,5,6]:
-                print("Invalid option, Please type an option that is displayed")
-        except:
-            print("Invalid option, Please type an option that is displayed")
-            continue
-    return(input_Option)    
-    
 
 #Adds new input to inventory
 def process_delivery(current_total, new_value):
@@ -160,55 +191,6 @@ def errorCount():
     errorCount.count +=1
     return errorCount.count
 
-##Opens inventory file. If file does not exist, creates a new inventory file
-def load_inventory(inventoryQuantity):
-    try:
-        inventoryFile= open("inventory.json",'r+')
-        #closes file
-        inventoryFile.close()
-        print("inventory.json found.")
-        
-        ##Reads data from file
-        with open("inventory.json",'r') as file:
-            file_contents = json.load(file)
-
-        #Get amount of stock already in inventory
-        for item in file_contents:
-            inventoryQuantity+=int(item["Stock"])
-
-        #get inventory number of last items
-        lastItem=file_contents[-1]
-        #Get the order number of the last item on the list
-        lastItemID=lastItem["ID"]
-        lastItemID=int(lastItemID[-1])
-
-        print("Inventory loaded successfully.\n")
-        return([file_contents,inventoryQuantity,lastItemID])
-
-    except:
-        inventoryFile= open("inventory.json",'w+')
-        #closes file
-        inventoryFile.close()
-        #empty file
-        return("Empty")
-
-#Adds one order at a time
-def save_inventory(current_inventory,num):
-    if num==5:
-        print("Saving inventory...")
-    else:
-        print("Saving inventory before exit...")
-
-    if current_inventory!= "Empty":
-        with open("inventory.json",'w+') as file:
-            json.dump(current_inventory, file,indent=1)
-
-    if num==5:
-        print("Inventory saved successfully to inventory.json.")
-    else:
-        print("Inventory saved successfully.")
-
-
 
 
 def stockOverflow(inventoryQuantity):
@@ -229,41 +211,73 @@ print("======================================== \n"
 inventoryQuantity = 0
 #order number of the last item on the list sets to 1001 if no file created before
 lastItemNumber=0
-
+current_inventory = Inventory()
 
 ##loads inventory (inventory in list)
-loaded_inventory=load_inventory(inventoryQuantity)
+loaded_inventory=File_Handling.load_inventory(inventoryQuantity)
 #current_inventory format= [dictionary of inventory, total number of all stocks, last item ID]
 if loaded_inventory != "Empty":
     current_inventory=loaded_inventory[0]
     inventoryQuantity=int(loaded_inventory[1])
     lastItemNumber=int(loaded_inventory[2])
-else:
-    current_inventory=[]
+
 
 
 #main loop 
 while True:
+    
     #Prevents adding more than 500 Quantity
     #if inventoryQuantity < 500:
-    display_menu()
-    userInput= get_valid_input()
+    Main_Program.display_menu()
+    userInput= Main_Program.get_valid_input()
     if userInput==1:
         if current_inventory== []:
             print("Inventory is Empty\n")
         else:
             Inventory.display_all(current_inventory)
     elif userInput==2:
-        current_inventory=Inventory.add_product(current_inventory,inventoryQuantity)
+        productID= input("Product ID: ")
+        productName=input("Product Name: ")
+        productPrice=input("Price: ")
+        stockQuantity=input("Stock Quantity: ")
+        #Create product object
+        product=Product(productID,productName,productPrice,stockQuantity)
+        #Add product to inventory object
+        inventory.add_product(product)
+
+        #current_inventory=Inventory.add_product(current_inventory,inventoryQuantity)
     elif userInput==3:
-        current_inventory=Inventory.update_stock(current_inventory,inventoryQuantity)
+        print("\nUpdate Stock\n")
+        ID_lookup=input("Enter Product ID:")
+        search_result=Inventory.search_product(current_inventory,ID_lookup,"update Item")
+        if search_result==True:
+            for item in current_inventory:
+                itemID=item["ID"]
+                if itemID==ID_lookup:
+                    print("Name: ", item["Name"])
+                    print("Current Stock: ", item["Stock"])
+                    old_stock=item["Stock"]
+                    new_stock=input("New Stock Quantity: ")
+
+                    inventoryQuantity=inventoryQuantity+int(new_stock) - int(old_stock)
+                    result=stockOverflow(inventoryQuantity)
+                    if result ==True:
+                        item["Stock"]=new_stock
+                        
+                        print("\nStock updated successfully!\n")
+                    else:
+                        inventoryQuantity=inventoryQuantity- int(new_stock) + int(old_stock)
+                        print("Quantity would go over 500. Item not added")
+                    break
+                
+            current_inventory=Product.update_stock(new_stock)
     elif userInput==4:
         search_item=input("Enter Product ID: ")
         search_result=Inventory.search_product(current_inventory,search_item,"print Item")
     elif userInput==5:
-        save_inventory(current_inventory,"Manual Save")
+        File_Handling.save_inventory(current_inventory,"Manual Save")
     elif userInput==6:
-        save_inventory(current_inventory,"Auto Save")
+        File_Handling.save_inventory(current_inventory,"Auto Save")
         print("Thank you for using Inventory Management System.\n"
         "Program terminated.")
         break
