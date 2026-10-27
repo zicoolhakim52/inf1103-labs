@@ -35,7 +35,7 @@ class Inventory:
             return True
         else:
             return False
-
+    #gets the list of objects for upload to file
     def inventory_list_func(self):
         inventory_func_list=[]
         for product in self.__inventory_list:
@@ -86,7 +86,6 @@ class Main_Program:
     def get_valid_input():
         #inputStrList=["Enter Product Name: ", "Enter Quantity: "]
         #errorMsgList=["Please enter a valid Product Name or 'quit' to exit: ", "Please enter a valid quantity or 'quit' to exit: "]
-        inputList=[]
         input_Option=""
 
         while type(input_Option)!=int:
@@ -98,6 +97,27 @@ class Main_Program:
                 print("Invalid option, Please type an option that is displayed")
                 continue
         return(input_Option)
+    def get_input_ID(userInput,current_inventory):
+        validateInputID=False
+        while validateInputID==False:
+            search_item= input("Product ID: ")
+            validateInput=Main_Program.validateID(search_item)
+            #Search if ID already exists
+            if validateInput:
+                IDExistsCheck=Main_Program.IDExists(search_item,current_inventory,userInput)
+                if IDExistsCheck[0]:
+                    if userInput==2:
+                        print("ID already exists, Please enter another ID")
+                    else:
+                        validateInputID=True
+                        return IDExistsCheck[1]
+                else:
+                    if userInput==2:
+                        return search_item
+                    else:
+                        print("ID does not exists, Please enter another ID")
+
+
     def validateID(productID):
         if productID=="":
             print("Product ID cannot be empty")
@@ -117,6 +137,14 @@ class Main_Program:
                 else:
                     print("Please input Pxxx where x is an integer")
                     return False
+    def IDExists(ID,current_inventory,userInput):
+        search_result=current_inventory.search_product(ID,userInput)
+        if search_result[0]:
+            return[True,search_result]
+        else:
+            current_inventory.display_all()
+            return[False]
+
     def validatePrice(productPrice):
         try:
             productPrice=float(productPrice)
@@ -247,23 +275,16 @@ while True:
     #if inventoryQuantity < 500:
     Main_Program.display_menu()
     userInput= Main_Program.get_valid_input()
+    #display inventory
     if userInput==1:
         if current_inventory.inventory_empty():
             print("Inventory is Empty\n")
         else:
             Inventory.display_all(current_inventory)
+    #add inventory
     elif userInput==2:
-        validateInputID=False
-        while validateInputID==False:
-            productID= input("Product ID: ")
-            validateInput=Main_Program.validateID(productID)
-            #Search if ID already exists
-            if validateInput:
-                search_result=current_inventory.search_product(productID,userInput)
-                if search_result[0]:
-                    validateInputID=True
-                else:
-                    current_inventory.display_all()
+        search_item=Main_Program.get_input_ID(userInput,current_inventory)
+
         productName=input("Product Name: ")
         validateInputPrice=False
         while validateInputPrice==False:
@@ -281,46 +302,40 @@ while True:
             else:
                 print("Stock must be an integer")
         #Create product object
-        product=Product(productID,productName,productPrice,stockQuantity)
+        product=Product(search_item,productName,productPrice,stockQuantity)
         #Add product to inventory object
         current_inventory.add_product(product)
 
         #current_inventory=Inventory.add_product(current_inventory,inventoryQuantity)
+    #update stock
     elif userInput==3:
         print("\nUpdate Stock\n")
-        validateInputID=False
-        while validateInputID==False:
-            ID_lookup=input("Enter Product ID:")
-            
-        
-        search_result=current_inventory.search_product(ID_lookup,userInput)
-        if search_result[0]==True:
-            product_info=search_result[1]
-            old_stock=product.getStock()
-            name=product.getName()
-            print("Name: ", name)
-            print("Current Stock: ", old_stock)
-            
-            new_stock=input("New Stock Quantity: ")
+        IDExistsCheck=Main_Program.get_input_ID(userInput,current_inventory)
 
-            inventoryQuantity=inventoryQuantity+int(new_stock) - int(old_stock)
-            result=stockOverflow(inventoryQuantity)
-            if result ==True:
-                item["Stock"]=new_stock
-                product_info.update_stock(new_stock)
-                
-                print("\nStock updated successfully!\n")
-            else:
-                inventoryQuantity=inventoryQuantity- int(new_stock) + int(old_stock)
-                print("Quantity would go over 500. Item not added")
-                
+        product_info=IDExistsCheck[1]
+        old_stock=product_info.getStock()
+        name=product_info.getName()
+        print("Name: ", name)
+        print("Current Stock: ", old_stock)
+        
+        new_stock=input("New Stock Quantity: ")
+
+        inventoryQuantity=inventoryQuantity+int(new_stock) - int(old_stock)
+        result=stockOverflow(inventoryQuantity)
+        if result ==True:
+            item["Stock"]=new_stock
+            product_info.update_stock(new_stock)
             
+            print("\nStock updated successfully!\n")
+        else:
+            inventoryQuantity=inventoryQuantity- int(new_stock) + int(old_stock)
+            print("Quantity would go over 500. Item not added")
+                
+    #Search Product
     elif userInput==4:
-        search_item=input("Enter Product ID: ")
-        search_result=current_inventory.search_product(search_item,userInput)
-        if search_result[0]==True:
-            product=search_result[1]
-            product.display_information()
+        search_result=Main_Program.get_input_ID(userInput,current_inventory)
+        product=search_result[1]
+        product.display_information()
     elif userInput==5:
         File_Handling.save_inventory(current_inventory,"Manual Save")
     elif userInput==6:

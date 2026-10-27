@@ -1,0 +1,20 @@
+[
+ {
+  "ID": "P001",
+  "Name": "Hakim",
+  "Price": 10.0,
+  "Stock": "2"
+ },
+ {
+  "ID": "P002",
+  "Name": "Hakimi",
+  "Price": 30.0,
+  "Stock": "10"
+ },
+ {
+  "ID": "P003",
+  "Name": "Hakii",
+  "Price": 20.0,
+  "Stock": "20"
+ }
+]
