@@ -40,7 +40,6 @@ class Inventory:
         inventory_func_list=[]
         for product in self.__inventory_list:
             inventory_func_list.append(product.product_information())
-        print(inventory_func_list)
         return inventory_func_list
 
     def add_product(self,product):
@@ -55,13 +54,13 @@ class Inventory:
                     return [True,product]
                 else:
                     print("ID is taken")
-                    return [False]
+                    return [True]
         if userInput!=2:
             print("No product Found")
             return [False]
         else:
             print("ID not taken")
-            return [True]
+            return [False]
         
 
         

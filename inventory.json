@@ -1,20 +1,26 @@
 [
  {
   "ID": "P001",
-  "Name": "Hakim",
-  "Price": 10.0,
+  "Name": "Laptop",
+  "Price": 1000.0,
   "Stock": "2"
  },
  {
   "ID": "P002",
-  "Name": "Hakimi",
-  "Price": 30.0,
+  "Name": "Monitor",
+  "Price": 300.0,
   "Stock": "10"
  },
  {
   "ID": "P003",
-  "Name": "Hakii",
+  "Name": "Headset",
   "Price": 20.0,
+  "Stock": "70"
+ },
+ {
+  "ID": "P004",
+  "Name": "Mouse",
+  "Price": 10.0,
   "Stock": "20"
  }
 ]
