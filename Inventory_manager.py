@@ -66,11 +66,11 @@ class DigitalProduct(Product):
 
     def display_information(self):
         super().display_information() 
-        print(f"Download size: {self.__download_size}")
+        print(f"Download size: {self._download_size}")
 
     def product_information(self):
             product_dict=super().product_information()
-            product_dict["Download size"]=self.__download_size
+            product_dict["Download size"]=self._download_size
             return product_dict
 
 class Inventory:
