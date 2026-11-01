@@ -36,7 +36,7 @@ class CanBeShipped(ABC):
 class PhysicalProduct(Product,CanBeShipped):
     def __init__(self, product_id, name, price, stock, weight):
         super().__init__(product_id, name, price, stock)
-        self.__weight=weight
+        self._weight=weight
 
     def get_fulfilment_info(self):
         print("Product requires physical shipping")
@@ -59,7 +59,7 @@ class PhysicalProduct(Product,CanBeShipped):
 class DigitalProduct(Product):
     def __init__(self, product_id, name, price, stock, download_size):
         super().__init__(product_id, name, price, stock)
-        self.__download_size=download_size
+        self._download_size=download_size
 
     def get_fulfilment_info(self):
         print("Product is delivered digitally")

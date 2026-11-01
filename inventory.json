@@ -26,19 +26,5 @@
   "Price": 1.0,
   "Stock": "2",
   "Weight": 0.5
- },
- {
-  "ID": "P005",
-  "Name": "WarThunder",
-  "Price": 100.0,
-  "Stock": "90",
-  "Download size": 100.0
- },
- {
-  "ID": "P006",
-  "Name": "Camera",
-  "Price": 1000.0,
-  "Stock": "1",
-  "Weight": 0.9
  }
 ]
