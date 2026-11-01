@@ -14,7 +14,7 @@ class Product(ABC):
         pass
 
     def display_information(self):
-        print(f"ID: {self.__productid} \nName: {self.__name} \nPrice: {self.__price} \nStock: {self.__stock}")
+        print(f"ID: {self.__productid} | Name: {self.__name} | Price: {self.__price} | Stock: {self.__stock}", end=" | ")
 
     def getStock(self):
         return self.__stock
@@ -27,8 +27,13 @@ class Product(ABC):
 
     def update_stock(self,new_stock):
         self.__stock= new_stock
-        
-class PhysicalProduct(Product):
+
+class CanBeShipped(ABC):
+    
+    def calculate_shipping_cost(self):
+        pass
+
+class PhysicalProduct(Product,CanBeShipped):
     def __init__(self, product_id, name, price, stock, weight):
         super().__init__(product_id, name, price, stock)
         self.__weight=weight
@@ -39,6 +44,11 @@ class PhysicalProduct(Product):
     def display_information(self):
         super().display_information() 
         print(f"Weight: {self.__weight}")
+
+    def calculate_shipping_cost(self):
+        #calculate $1 per 1kg
+        weight=self.__weight * 1
+        print(f"Total shipping cost of item is ${round(weight,2)}")
 
 class DigitalProduct(Product):
     def __init__(self, product_id, name, price, stock, download_size):
@@ -52,12 +62,6 @@ class DigitalProduct(Product):
         super().display_information() 
         print(f"Download size: {self.__download_size}")
 
-toy=Product("1002", "MegaMan", 10.00)
-toy=DigitalProduct("1002", "MegaMan", 10.00, 100,1.0)
-toy.display_information()
-toy=PhysicalProduct("1003", "SpidaMan", 12.00, 1020,1.12)
-toy.display_information()
-'''
 class Inventory:
     def __init__(self):
         self.__inventory_list=[]
@@ -292,7 +296,10 @@ loaded_inventory=File_Handling.load_inventory(inventoryQuantity)
 #current_inventory format= [dictionary of inventory, total number of all stocks, last item ID]
 if loaded_inventory != "Empty":
     for item in loaded_inventory[0]:
-        product=Product(item["ID"],item["Name"],item["Price"],item["Stock"])
+        if "Download size" in item.keys():
+            product=DigitalProduct(item["ID"],item["Name"],item["Price"],item["Stock"],item["Download size"])
+        else:
+            product=PhysicalProduct(item["ID"],item["Name"],item["Price"],item["Stock"],item["Weight"])
         current_inventory.add_product(product)
     inventoryQuantity=int(loaded_inventory[1])
     lastItemNumber=int(loaded_inventory[2])
@@ -378,4 +385,3 @@ while True:
 
            
 
-'''
