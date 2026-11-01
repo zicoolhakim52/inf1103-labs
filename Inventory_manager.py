@@ -50,6 +50,12 @@ class PhysicalProduct(Product,CanBeShipped):
         weight=self.__weight * 1
         print(f"Total shipping cost of item is ${round(weight,2)}")
 
+    def product_information(self):
+        product_dict=super().product_information()
+        product_dict["Weight"]=self.__weight
+        return product_dict
+
+
 class DigitalProduct(Product):
     def __init__(self, product_id, name, price, stock, download_size):
         super().__init__(product_id, name, price, stock)
@@ -61,6 +67,11 @@ class DigitalProduct(Product):
     def display_information(self):
         super().display_information() 
         print(f"Download size: {self.__download_size}")
+
+    def product_information(self):
+            product_dict=super().product_information()
+            product_dict["Download size"]=self.__download_size
+            return product_dict
 
 class Inventory:
     def __init__(self):
@@ -181,7 +192,7 @@ class Main_Program:
             #current_inventory.display_all()
             return[False]
 
-    def validatePrice(productPrice):
+    def validatePriceType(productPrice):
         try:
             productPrice=float(productPrice)
             price=round(productPrice,2)
@@ -233,7 +244,6 @@ class File_Handling:
             print("Saving inventory...")
         else:
             print("Saving inventory before exit...")
-
         if not current_inventory.inventory_empty():
             with open("inventory.json",'w+') as file:
                 json.dump(current_inventory.inventory_list_func(), file,indent=1)
@@ -270,8 +280,6 @@ def errorCount():
     errorCount.count +=1
     return errorCount.count
 
-
-
 def stockOverflow(inventoryQuantity):
     #if stock is over 500, the program prevents adding more
     if inventoryQuantity>500:
@@ -280,7 +288,61 @@ def stockOverflow(inventoryQuantity):
         resultQuantity=True
     return(resultQuantity)
 
+def get_product_type():
+    product_type=False
+    while product_type !="Physical" and product_type!= "Digital":
+        product_type=input("Input product type: Physical or Digital: ")
+    return product_type
 
+def get_product_price():
+    validateInputPrice=False
+    while validateInputPrice==False:
+        productPrice=input("Price: ")
+        validateInput=Main_Program.validatePriceType(productPrice)
+        if validateInput[0]:
+            #price is rounded to 2 decimal places
+            productPrice=validateInput[1]
+            validateInputPrice=True
+    return productPrice
+
+def get_valid_stock():
+    validateInputStock=False
+    while validateInputStock==False:
+        stockQuantity=input("Stock Quantity: ")
+        if stockQuantity.isdigit():
+            validateInputStock=True
+        else:
+            print("Stock must be an integer")
+    return stockQuantity
+
+def get_product_class(search_item,productName,productPrice,stockQuantity,product_type):
+    if product_type=="Digital":
+        download_size_input=get_valid_digital_input()
+        product=DigitalProduct(search_item,productName,productPrice,stockQuantity,download_size_input)
+    else:
+        product_weight_input=get_valid_weight_input()
+        product=PhysicalProduct(search_item,productName,productPrice,stockQuantity,product_weight_input)
+    return product
+
+def get_valid_digital_input():
+    download_size_input=False
+    while type(download_size_input)!= float:
+        download_size_input=input("Download file size in (GB): ")
+        try:
+            download_size_input = float(download_size_input)
+        except:
+            print("Error: The input is not a valid float.")
+    return download_size_input
+
+def get_valid_weight_input():
+    product_weight_input=False
+    while type(product_weight_input)!= float:
+        product_weight_input=input("Enter weight of product in KG: ")
+        try:
+            product_weight_input = float(product_weight_input)
+        except:
+            print("Error: The input is not a valid float.")
+    return product_weight_input
 
 ##Start of programs
 print("======================================== \n"
@@ -322,46 +384,13 @@ while True:
             Inventory.display_all(current_inventory)
     #add inventory
     elif userInput==2:
-        product_type=False
-        while product_type !="Physical" and product_type!= "Digital":
-            product_type=input("Input product type: Physical or Digital: ")
+        product_type=get_product_type()
         search_item=Main_Program.get_input_ID(userInput,current_inventory)
         productName=input("Product Name: ")
-        validateInputPrice=False
-        while validateInputPrice==False:
-            productPrice=input("Price: ")
-            validateInput=Main_Program.validatePrice(productPrice)
-            if validateInput[0]:
-                #price is rounded to 2 decimal places
-                productPrice=validateInput[1]
-                validateInputPrice=True
-        validateInputStock=False
-        while validateInputStock==False:
-            stockQuantity=input("Stock Quantity: ")
-            if stockQuantity.isdigit():
-                validateInputStock=True
-            else:
-                print("Stock must be an integer")
-        if product_type=="Digital":
-            download_size_input=False
-            while type(download_size_input)!= float:
-                download_size_input=input("Download file size in (GB): ")
-                try:
-                    download_size_input = float(download_size_input)
-                except:
-                    print("Error: The input is not a valid float.")
-            product=DigitalProduct(search_item,productName,productPrice,stockQuantity,download_size_input)
-        else:
-            product_weight_input=False
-            while type(product_weight_input)!= float:
-                product_weight_input=input("Enter weight of product in KG: ")
-                try:
-                    product_weight_input = float(product_weight_input)
-                except:
-                    print("Error: The input is not a valid float.")
-            product=PhysicalProduct(search_item,productName,productPrice,stockQuantity,product_weight_input)
-
-            
+        productPrice=get_product_price()
+        stockQuantity=get_valid_stock()
+        product=get_product_class(search_item,productName,productPrice,stockQuantity,product_type)
+                    
         #Create product object
         #Add product to inventory object
         current_inventory.add_product(product)
@@ -379,7 +408,7 @@ while True:
         print("Current Stock: ", old_stock)
         
         new_stock=input("New Stock Quantity: ")
-
+        #Update total inventory
         inventoryQuantity=inventoryQuantity+int(new_stock) - int(old_stock)
         result=stockOverflow(inventoryQuantity)
         if result ==True:

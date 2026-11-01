@@ -3,30 +3,42 @@
   "ID": "P001",
   "Name": "Laptop",
   "Price": 1000.0,
-  "Stock": "2"
+  "Stock": 2,
+  "Weight": 1.5
  },
  {
   "ID": "P002",
   "Name": "Monitor",
   "Price": 300.0,
-  "Stock": "10"
+  "Stock": 10,
+  "Weight": 1.7
  },
  {
   "ID": "P003",
-  "Name": "Headset",
+  "Name": "League of Legends DLC",
   "Price": 20.0,
-  "Stock": "70"
+  "Stock": 70,
+  "Download size": 10.5
  },
  {
   "ID": "P004",
-  "Name": "Mouse",
-  "Price": 10.0,
-  "Stock": "15"
+  "Name": "Mickey Mouse toy",
+  "Price": 1.0,
+  "Stock": "2",
+  "Weight": 0.5
  },
  {
   "ID": "P005",
-  "Name": "Video Camera",
-  "Price": 1500.0,
-  "Stock": "10"
+  "Name": "WarThunder",
+  "Price": 100.0,
+  "Stock": "90",
+  "Download size": 100.0
+ },
+ {
+  "ID": "P006",
+  "Name": "Camera",
+  "Price": 1000.0,
+  "Stock": "1",
+  "Weight": 0.9
  }
 ]
