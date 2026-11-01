@@ -135,6 +135,7 @@ class Main_Program:
     def get_input_ID(userInput,current_inventory):
         validateInputID=False
         while validateInputID==False:
+            current_inventory.display_all()
             search_item= input("Product ID: ")
             validateInput=Main_Program.validateID(search_item)
             #Search if ID already exists
@@ -177,7 +178,7 @@ class Main_Program:
         if search_result[0]:
             return[True,search_result]
         else:
-            current_inventory.display_all()
+            #current_inventory.display_all()
             return[False]
 
     def validatePrice(productPrice):
@@ -321,8 +322,10 @@ while True:
             Inventory.display_all(current_inventory)
     #add inventory
     elif userInput==2:
+        product_type=False
+        while product_type !="Physical" and product_type!= "Digital":
+            product_type=input("Input product type: Physical or Digital: ")
         search_item=Main_Program.get_input_ID(userInput,current_inventory)
-
         productName=input("Product Name: ")
         validateInputPrice=False
         while validateInputPrice==False:
@@ -339,8 +342,27 @@ while True:
                 validateInputStock=True
             else:
                 print("Stock must be an integer")
+        if product_type=="Digital":
+            download_size_input=False
+            while type(download_size_input)!= float:
+                download_size_input=input("Download file size in (GB): ")
+                try:
+                    download_size_input = float(download_size_input)
+                except:
+                    print("Error: The input is not a valid float.")
+            product=DigitalProduct(search_item,productName,productPrice,stockQuantity,download_size_input)
+        else:
+            product_weight_input=False
+            while type(product_weight_input)!= float:
+                product_weight_input=input("Enter weight of product in KG: ")
+                try:
+                    product_weight_input = float(product_weight_input)
+                except:
+                    print("Error: The input is not a valid float.")
+            product=PhysicalProduct(search_item,productName,productPrice,stockQuantity,product_weight_input)
+
+            
         #Create product object
-        product=Product(search_item,productName,productPrice,stockQuantity)
         #Add product to inventory object
         current_inventory.add_product(product)
 
