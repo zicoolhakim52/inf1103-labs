@@ -9,6 +9,9 @@ class Product(ABC):
         self.__price = price
         self.__stock = stock
 
+    @abstractmethod
+    def get_fulfilment_info():
+        pass
 
     def display_information(self):
         print(f"ID: {self.__productid} \nName: {self.__name} \nPrice: {self.__price} \nStock: {self.__stock}")
@@ -26,9 +29,12 @@ class Product(ABC):
         self.__stock= new_stock
         
 class PhysicalProduct(Product):
-    def __init__(self, product_id, name, price, stock,weight):
+    def __init__(self, product_id, name, price, stock, weight):
         super().__init__(product_id, name, price, stock)
         self.__weight=weight
+
+    def get_fulfilment_info(self):
+        print("Product requires physical shipping")
 
     def display_information(self):
         super().display_information() 
@@ -39,10 +45,19 @@ class DigitalProduct(Product):
         super().__init__(product_id, name, price, stock)
         self.__download_size=download_size
 
+    def get_fulfilment_info(self):
+        print("Product is delivered digitally")
+
     def display_information(self):
         super().display_information() 
         print(f"Download size: {self.__download_size}")
 
+toy=Product("1002", "MegaMan", 10.00)
+toy=DigitalProduct("1002", "MegaMan", 10.00, 100,1.0)
+toy.display_information()
+toy=PhysicalProduct("1003", "SpidaMan", 12.00, 1020,1.12)
+toy.display_information()
+'''
 class Inventory:
     def __init__(self):
         self.__inventory_list=[]
@@ -363,3 +378,4 @@ while True:
 
            
 
+'''
