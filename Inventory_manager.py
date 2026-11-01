@@ -1,7 +1,8 @@
 import json
+from abc import ABC, abstractmethod
 
 #classes
-class Product:
+class Product(ABC):
     def __init__(self,product_id,name,price,stock):
         self.__productid = product_id
         self.__name = name
@@ -10,7 +11,7 @@ class Product:
 
 
     def display_information(self):
-        print(f"ID: {self.__productid} | Name: {self.__name} Price: {self.__price} Stock: {self.__stock}")
+        print(f"ID: {self.__productid} \nName: {self.__name} \nPrice: {self.__price} \nStock: {self.__stock}")
 
     def getStock(self):
         return self.__stock
@@ -24,7 +25,14 @@ class Product:
     def update_stock(self,new_stock):
         self.__stock= new_stock
         
+class PhysicalProduct(Product):
+    def __init__(self, product_id, name, price, stock,weight):
+        super().__init__(product_id, name, price, stock)
+        self.__weight=weight
 
+    def display_information(self):
+        super().display_information() 
+        print(f"Weight: {self.__weight}")
 
 class Inventory:
     def __init__(self):
