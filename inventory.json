@@ -26,5 +26,19 @@
   "Price": 1.0,
   "Stock": "2",
   "Weight": 0.5
+ },
+ {
+  "ID": "P005",
+  "Name": "Iphone 18 Duo",
+  "Price": 3000.0,
+  "Stock": "10",
+  "Weight": 0.9
+ },
+ {
+  "ID": "P006",
+  "Name": "Samsung smart fridge",
+  "Price": 9000.0,
+  "Stock": "100",
+  "Weight": 10.0
  }
 ]
