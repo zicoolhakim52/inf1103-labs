@@ -1,3 +1,4 @@
+#Input functions in this class
 class Main_Program:
     def display_menu():
         print("----------- MENU -----------\n"
