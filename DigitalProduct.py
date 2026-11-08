@@ -13,7 +13,7 @@ class DigitalProduct(Product):
         super().display_information() 
         print(f"Download size: {self._download_size}")
 
-    def product_information(self):
+    def product_information(self) -> dict:
         product_dict=super().product_information()
         product_dict["Download size"]=self._download_size
         return product_dict

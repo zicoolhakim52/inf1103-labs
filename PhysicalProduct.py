@@ -18,7 +18,7 @@ class PhysicalProduct(Product,CanBeShipped):
         weight=self._weight * 1
         print(f"Total shipping cost of item is ${round(weight,2)}")
 
-    def product_information(self):
+    def product_information(self) -> dict:
         product_dict=super().product_information()
         product_dict["Weight"]=self._weight
         return product_dict

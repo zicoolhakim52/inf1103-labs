@@ -1,17 +1,17 @@
 from Product import Product
-from PhysicalProduct import PhysicalProduct
+#from PhysicalProduct import PhysicalProduct
 from Supplier import Supplier
 class Inventory:
     def __init__(self):
         self.inventory_list: list[Product]=[]
 
-    def inventory_empty(self):
+    def inventory_empty(self) -> bool:
         if self.inventory_list==[]:
             return True
         else:
             return False
     #gets the list of objects for upload to file
-    def inventory_list_func(self):
+    def inventory_list_func(self) -> list:
         inventory_func_list=[]
         for product in self.inventory_list:
             inventory_func_list.append(product.product_information())
