@@ -22,12 +22,19 @@ class Inventory:
         self.products.append(product)
 
     def remove_product(self,product:Product) -> None:
-        product_item=self.find_product(product,1)
+        product_item=self.find_product(product)
         self.products.remove(product_item)
 
-    def find_product(self,productID: str,userInput: str) -> Product | None:
+    def find_product(self,productInput: Product) -> Product | None:
+            for product in self.products:
+                if product.product_information()["ID"]==productInput.getProductID():
+                    return product
+            return None
+
+    def search_product_by_ID(self,searchID,userInput) -> Product | None:
         for product in self.products:
-            if product.product_information()["ID"]==productID:
+            
+            if product.product_information()["ID"]==searchID:
                 if userInput!=2:
                     print("\nProduct Found!\n")
                 else:
@@ -49,14 +56,12 @@ class Inventory:
             item.display_information()
         print("------------------------------------------------\n")
 
-    
-
 
 
 '''
 def display_all_products(self) -> None:
-        for product in self.products:
-            product.display_information()
+    for product in self.products:
+        product.display_information()
             
 def show_product_details(product: Product) -> None:
         product.display_information()
@@ -68,8 +73,16 @@ productB=DigitalProduct("2","COD WAW",12,100,20,sup1)
 inventoryA=Inventory()
 inventoryA.add_product(productA)
 inventoryA.add_product(productB)
+
+inventoryA.remove_product(productA)
+print("inventory A:")
 inventoryA.display_all_products()
+
+inventoryB=Inventory()
+inventoryB.add_product(productA)
+print("inventory B:")
+inventoryB.display_all_products()
+
 show_product_details(productA)
 show_product_details(productB)
-
 '''
