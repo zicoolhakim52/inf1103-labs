@@ -23,6 +23,9 @@ class Product(ABC):
         return self.__name
     def getProductID(self):
         return self.__productid
+
+    def getPrice(self):
+        return self.__price
     #Returns as a dictionary
     def product_information(self):
         return({"ID": self.__productid, "Name": self.__name, "Price": self.__price, "Stock": self.__stock})
