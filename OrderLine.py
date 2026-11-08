@@ -7,5 +7,5 @@ class OrderLine:
     def calculate_subtotal(self) -> float:
         return self.product.getPrice() * self.quantity
 
-    def display_orderLine(self):
+    def display_orderLine(self)-> None:
         self.product.display_information()

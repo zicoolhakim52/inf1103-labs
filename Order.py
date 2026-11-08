@@ -17,7 +17,7 @@ class Order:
             total+=product.calculate_subtotal()
         return total
 
-    def display_order(self):
+    def display_order(self)-> None:
         for product in self.order_lines:
             product.display_orderLine()
 

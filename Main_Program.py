@@ -65,7 +65,7 @@ class Main_Program:
                     print("Please input Pxxx where x is an integer")
                     return False
     def IDExists(ID,current_inventory,userInput):
-        search_result=current_inventory.search_product(ID,userInput)
+        search_result=current_inventory.find_product(ID,userInput)
         if search_result==None:
             #current_inventory.display_all()
             return None

@@ -9,26 +9,28 @@ class Product(ABC):
         self.__supplier=supplier
 
     @abstractmethod
-    def get_fulfilment_info():
+    def get_fulfilment_info()-> None:
         pass
 
-    def display_information(self):
+    def display_information(self)-> None:
         print(f"ID: {self.__productid} | Name: {self.__name} | Price: {self.__price} | Stock: {self.__stock}", end=" | ")
         self.__supplier.display_information()
 
-    def getStock(self):
+    def getStock(self)-> int:
         return self.__stock
 
-    def getName(self):
+    def getName(self)-> str:
         return self.__name
-    def getProductID(self):
+    
+    def getProductID(self)-> str:
         return self.__productid
 
-    def getPrice(self):
+    def getPrice(self)-> float:
         return self.__price
     #Returns as a dictionary
-    def product_information(self):
+    def product_information(self)-> dict:
         return({"ID": self.__productid, "Name": self.__name, "Price": self.__price, "Stock": self.__stock})
 
-    def update_stock(self,new_stock):
+    def update_stock(self,new_stock)-> None:
         self.__stock= new_stock
+

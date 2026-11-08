@@ -1,33 +1,34 @@
 from Product import Product
-#from PhysicalProduct import PhysicalProduct
+from PhysicalProduct import PhysicalProduct
+from DigitalProduct import DigitalProduct
 from Supplier import Supplier
 class Inventory:
     def __init__(self):
-        self.inventory_list: list[Product]=[]
+        self.products: list[Product]=[]
 
     def inventory_empty(self) -> bool:
-        if self.inventory_list==[]:
+        if self.products==[]:
             return True
         else:
             return False
     #gets the list of objects for upload to file
     def inventory_list_func(self) -> list:
         inventory_func_list=[]
-        for product in self.inventory_list:
+        for product in self.products:
             inventory_func_list.append(product.product_information())
         return inventory_func_list
 
-    def add_product(self,product:Product):
-        self.inventory_list.append(product)
+    def add_product(self,product:Product)-> None:
+        self.products.append(product)
 
-    def remove_product(self,product_id:str):
-        product_item=self.search_product(product_id,1)
-        self.inventory_list.remove(product_item)
+    def remove_product(self,product:Product) -> None:
+        product_item=self.find_product(product,1)
+        self.products.remove(product_item)
 
-    def search_product(self,searchID: str,userInput: str):
-        for product in self.inventory_list:
+    def find_product(self,product: str,userInput: str) -> Product | None:
+        for product in self.products:
 
-            if product.product_information()["ID"]==searchID.getProductID():
+            if product.product_information()["ID"]==product.getProductID():
                 if userInput!=2:
                     print("\nProduct Found!\n")
                 else:
@@ -41,24 +42,33 @@ class Inventory:
         
         return None
         
-    def display_all(self):
+    def display_all(self)-> None:
         print("Current Inventory\n"
         "------------------------------------------------")
         #ID: P001 | Name: Laptop | Price: $1200.00 | Stock: 15
-        for item in self.inventory_list:
+        for item in self.products:
             item.display_information()
         print("------------------------------------------------\n")
 
+    def display_all_products(self) -> None:
+        for product in self.products:
+            product.display_information()
+
+
+
 '''
+def show_product_details(product: Product) -> None:
+        product.display_information()
+        print(product.get_fulfilment_info())
+
 sup1=Supplier("1","IBM","ibmemail")
 productA=PhysicalProduct("1","Laptop",1999.99,10,1.5,sup1)
+productB=DigitalProduct("2","COD WAW",12,100,20,sup1)
 inventoryA=Inventory()
 inventoryA.add_product(productA)
-inventoryA.remove_product(productA)
-
-productA.display_information()
-inventoryB=Inventory()
-inventoryB.add_product(productA)
-productA.display_information()
+inventoryA.add_product(productB)
+inventoryA.display_all_products()
+show_product_details(productA)
+show_product_details(productB)
 
 '''

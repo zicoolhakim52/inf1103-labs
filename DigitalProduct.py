@@ -6,10 +6,10 @@ class DigitalProduct(Product):
         super().__init__(product_id, name, price, stock, supplier)
         self._download_size=download_size
 
-    def get_fulfilment_info(self):
+    def get_fulfilment_info(self)-> None:
         print("Product is delivered digitally")
 
-    def display_information(self):
+    def display_information(self)-> None:
         super().display_information() 
         print(f"Download size: {self._download_size}")
 
@@ -17,6 +17,7 @@ class DigitalProduct(Product):
         product_dict=super().product_information()
         product_dict["Download size"]=self._download_size
         return product_dict
+    
 
 
 
