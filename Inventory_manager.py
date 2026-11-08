@@ -3,6 +3,7 @@ from PhysicalProduct import PhysicalProduct
 from Inventory import Inventory
 from File_Handling import File_Handling
 from Main_Program import Main_Program
+from Supplier import Supplier
    
 #Functions
 
@@ -40,13 +41,13 @@ def stockOverflow(inventoryQuantity):
     return(resultQuantity)
 
 
-def get_product_class(search_item,productName,productPrice,stockQuantity,product_type):
+def get_product_class(search_item,productName,productPrice,stockQuantity,product_type,supplierinfo):
     if product_type=="Digital":
         download_size_input=Main_Program.get_valid_digital_input()
-        product=DigitalProduct(search_item,productName,productPrice,stockQuantity,download_size_input)
+        product=DigitalProduct(search_item,productName,productPrice,stockQuantity,download_size_input,supplierinfo)
     else:
         product_weight_input=Main_Program.get_valid_weight_input()
-        product=PhysicalProduct(search_item,productName,productPrice,stockQuantity,product_weight_input)
+        product=PhysicalProduct(search_item,productName,productPrice,stockQuantity,product_weight_input,supplierinfo)
     return product
 
 
@@ -65,10 +66,11 @@ loaded_inventory=File_Handling.load_inventory(inventoryQuantity)
 #current_inventory format= [dictionary of inventory, total number of all stocks, last item ID]
 if loaded_inventory != "Empty":
     for item in loaded_inventory[0]:
+        supplier_info=Supplier(item["SupplierID"],item["SupplierName"],item["SupplierEmail"])
         if "Download size" in item.keys():
-            product=DigitalProduct(item["ID"],item["Name"],item["Price"],item["Stock"],item["Download size"])
+            product=DigitalProduct(item["ID"],item["Name"],item["Price"],item["Stock"],item["Download size"],supplier_info)
         else:
-            product=PhysicalProduct(item["ID"],item["Name"],item["Price"],item["Stock"],item["Weight"])
+            product=PhysicalProduct(item["ID"],item["Name"],item["Price"],item["Stock"],item["Weight"],supplier_info)
         current_inventory.add_product(product)
     inventoryQuantity=int(loaded_inventory[1])
     lastItemNumber=int(loaded_inventory[2])
@@ -95,7 +97,11 @@ while True:
         productName=input("Product Name: ")
         productPrice=Main_Program.get_product_price()
         stockQuantity=Main_Program.get_valid_stock()
-        product=get_product_class(search_item,productName,productPrice,stockQuantity,product_type)
+        supplierID=input("Enter Supplier ID: ")
+        supplierName=input("Enter Supplier Name: ")
+        supplierEmail=input("Enter Supplier Email: ")
+        supplierinfo=Supplier(supplierID,supplierName,supplierEmail)
+        product=get_product_class(search_item,productName,productPrice,stockQuantity,product_type,supplierinfo)
                     
         #Create product object
         #Add product to inventory object
@@ -107,7 +113,7 @@ while True:
         print("\nUpdate Stock\n")
         IDExistsCheck=Main_Program.get_input_ID(userInput,current_inventory)
 
-        product_info=IDExistsCheck[1]
+        product_info=IDExistsCheck
         old_stock=product_info.getStock()
         name=product_info.getName()
         print("Name: ", name)
@@ -129,7 +135,7 @@ while True:
     #Search Product
     elif userInput==4:
         search_result=Main_Program.get_input_ID(userInput,current_inventory)
-        product=search_result[1]
+        product=search_result
         product.display_information()
     elif userInput==5:
         File_Handling.save_inventory(current_inventory,"Manual Save")

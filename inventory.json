@@ -4,6 +4,9 @@
   "Name": "Laptop",
   "Price": 1000.0,
   "Stock": 2,
+  "SupplierID": 1,
+  "SupplierName": "Samsung",
+  "SupplierEmail": "Samsung@email.com",
   "Weight": 1.5
  },
  {
@@ -11,6 +14,9 @@
   "Name": "Monitor",
   "Price": 300.0,
   "Stock": 10,
+  "SupplierID": 1,
+  "SupplierName": "Samsung",
+  "SupplierEmail": "Samsung@email.com",
   "Weight": 1.7
  },
  {
@@ -18,6 +24,9 @@
   "Name": "League of Legends DLC",
   "Price": 20.0,
   "Stock": 70,
+  "SupplierID": 2,
+  "SupplierName": "Steam",
+  "SupplierEmail": "Steam@email.com",
   "Download size": 10.5
  },
  {
@@ -25,20 +34,19 @@
   "Name": "Mickey Mouse toy",
   "Price": 1.0,
   "Stock": "2",
+  "SupplierID": 3,
+  "SupplierName": "Disney",
+  "SupplierEmail": "Disney@email.com",
   "Weight": 0.5
  },
  {
   "ID": "P005",
-  "Name": "Iphone 18 Duo",
-  "Price": 3000.0,
-  "Stock": "10",
-  "Weight": 0.9
- },
- {
-  "ID": "P006",
-  "Name": "Samsung smart fridge",
-  "Price": 9000.0,
-  "Stock": "100",
-  "Weight": 10.0
+  "Name": "COD 4 MW",
+  "Price": 100.0,
+  "Stock": "99",
+  "SupplierID": 4,
+  "SupplierName": "Active Vision",
+  "SupplierEmail": "AV@email.com",
+  "Download size": 200.0
  }
 ]

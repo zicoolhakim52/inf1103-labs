@@ -25,10 +25,9 @@ class Inventory:
         product_item=self.find_product(product,1)
         self.products.remove(product_item)
 
-    def find_product(self,product: str,userInput: str) -> Product | None:
+    def find_product(self,productID: str,userInput: str) -> Product | None:
         for product in self.products:
-
-            if product.product_information()["ID"]==product.getProductID():
+            if product.product_information()["ID"]==productID:
                 if userInput!=2:
                     print("\nProduct Found!\n")
                 else:
@@ -50,13 +49,15 @@ class Inventory:
             item.display_information()
         print("------------------------------------------------\n")
 
-    def display_all_products(self) -> None:
-        for product in self.products:
-            product.display_information()
+    
 
 
 
 '''
+def display_all_products(self) -> None:
+        for product in self.products:
+            product.display_information()
+            
 def show_product_details(product: Product) -> None:
         product.display_information()
         print(product.get_fulfilment_info())
