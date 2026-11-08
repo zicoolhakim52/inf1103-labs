@@ -32,12 +32,12 @@ class Main_Program:
             #Search if ID already exists
             if validateInput:
                 IDExistsCheck=Main_Program.IDExists(search_item,current_inventory,userInput)
-                if IDExistsCheck[0]:
+                if IDExistsCheck!=None:
                     if userInput==2:
                         print("ID already exists, Please enter another ID")
                     else:
                         validateInputID=True
-                        return IDExistsCheck[1]
+                        return IDExistsCheck
                 else:
                     if userInput==2:
                         return search_item
@@ -66,11 +66,13 @@ class Main_Program:
                     return False
     def IDExists(ID,current_inventory,userInput):
         search_result=current_inventory.search_product(ID,userInput)
-        if search_result[0]:
-            return[True,search_result]
-        else:
+        if search_result==None:
             #current_inventory.display_all()
-            return[False]
+            return None
+            
+        else:
+            #returns
+            return search_result
 
     def validatePriceType(productPrice):
         try:
