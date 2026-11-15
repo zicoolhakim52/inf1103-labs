@@ -77,45 +77,53 @@ while True:
 
     elif userInput == 2:
         product_type = Main_Program.get_product_type()
-        search_item = Main_Program.get_input_ID(userInput, current_inventory)
-        productName = input("Product Name: ")
-        productPrice = Main_Program.get_product_price()
-        stockQuantity = Main_Program.get_valid_stock()
-        #display suppliers
-        Main_Program.get_supplier_list(supplier_list)
-        supplierinfo = Main_Program.input_supplier_id(Main_Program.get_supplier_id_list(supplier_list),supplier_list)
-        
-        '''supplierName = input("Enter Supplier Name: ")
-        supplierEmail = input("Enter Supplier Email: ")
-        supplierinfo = Supplier(supplierID, supplierName, supplierEmail)'''
-        product = get_product_class(
-            search_item,
-            productName,
-            productPrice,
-            stockQuantity,
-            product_type,
-            supplierinfo,
-        )
-        current_inventory.add_product(product)
+        product_id = Main_Program.get_input_ID(userInput, current_inventory)
+        product=Main_Program.get_product(current_inventory,product_id)
+        if product==None:
+            productName = input("Product Name: ")
+            productPrice = Main_Program.get_product_price()
+            stockQuantity = Main_Program.get_valid_stock()
+            #display suppliers
+            Main_Program.get_supplier_list(supplier_list)
+            supplierinfo = Main_Program.input_supplier_id(Main_Program.get_supplier_id_list(supplier_list),supplier_list)
+            
+            '''supplierName = input("Enter Supplier Name: ")
+            supplierEmail = input("Enter Supplier Email: ")
+            supplierinfo = Supplier(supplierID, supplierName, supplierEmail)'''
+            product = get_product_class(
+                product_id,
+                productName,
+                productPrice,
+                stockQuantity,
+                product_type,
+                supplierinfo,
+            )
+            current_inventory.add_product(product)
+        else:
+            print("Product ID already taken")
 
     elif userInput == 3:
         print("\nUpdate Stock\n")
-        IDExistsCheck = Main_Program.get_input_ID(userInput, current_inventory)
-
-        product_info = IDExistsCheck
-        old_stock = product_info.getStock()
-        name = product_info.getName()
-        print("Name: ", name)
-        print("Current Stock: ", old_stock)
-
-        new_stock = input("New Stock Quantity: ")
+        while True:
+            product_id = Main_Program.get_input_ID(userInput, current_inventory)
+            if product_id==False:
+                break
+            else:
+                product=Main_Program.get_product(current_inventory,product_id)
+                old_stock = product.getStock()
+                name = product.getName()
+                print("Name: ", name)
+                print("Current Stock: ", old_stock)
         
-        product_info.update_stock(new_stock)
-        print("\nStock updated successfully!\n")
+                new_stock = input("New Stock Quantity: ")
+                
+                product.update_stock(new_stock)
+                print("\nStock updated successfully!\n")
+                break
 
     elif userInput == 4:
-        search_result = Main_Program.get_input_ID(userInput, current_inventory)
-        product = search_result
+        product_id = Main_Program.get_input_ID(userInput, current_inventory)
+        product=Main_Program.get_product(current_inventory,product_id)
         product.display_information()
 
     elif userInput == 5:

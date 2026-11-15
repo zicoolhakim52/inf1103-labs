@@ -39,18 +39,12 @@ class Inventory:
                 return product
         return None
 
-    def search_product_by_ID(self, searchID, userInput) -> Product | None:
+    def search_product_by_ID(self, searchID) -> Product | None:
         for product in self.products:
             if product.product_information()["ID"] == searchID:
-                if userInput != 2:
-                    print("\nProduct Found!\n")
-                else:
-                    print("ID is taken")
+                print("ID is taken")
                 return product
-        if userInput != 2:
-            print("No product Found")
-        else:
-            print("ID not taken")
+        print("ID not taken")
         return None
 
     def display_all(self) -> None:

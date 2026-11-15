@@ -58,14 +58,19 @@ class Main_Program:
                 continue
         return input_Option
 
-    def get_input_ID(userInput, current_inventory)-> bool | Product:
+    def get_input_ID(userInput, current_inventory)-> bool | str:
         validateInputID = False
         while validateInputID == False:
             current_inventory.display_all()
-            search_item = input("Product ID: ")
+            search_item = input("Product ID (enter 0 to cancel): ")
+            if search_item==0:
+                return False
             validateInput = Main_Program.validateID(search_item)
             if validateInput:
-                IDExistsCheck = Main_Program.IDExists(
+                return search_item
+                    #Main_Program.get_product(current_inventory,userInput,search_item)
+                    
+                '''IDExistsCheck = Main_Program.get_product(
                     search_item, current_inventory, userInput
                 )
                 if IDExistsCheck != None:
@@ -78,7 +83,14 @@ class Main_Program:
                     if userInput == 2:
                         return search_item
                     else:
-                        print("ID does not exists, Please enter another ID")
+                        print("ID does not exists, Please enter another ID")'''
+    def get_product(current_inventory,ID):
+        search_result = current_inventory.search_product_by_ID(ID)
+        if search_result == None:
+            return None
+        else:
+            return search_result
+
 
     def validateID(productID)->bool:
         if productID == "":
@@ -102,17 +114,11 @@ class Main_Program:
                     print("Please input Pxxx where x is an integer")
                     return False
 
-    def IDExists(ID, current_inventory, userInput)->None | Product:
-        search_result = current_inventory.search_product_by_ID(ID, userInput)
-        if search_result == None:
-            return None
-        else:
-            return search_result
 
-    def add_product(productID, current_inventory)-> None:
+    def add_product(productID, current_inventory)-> Product:
         validation = Main_Program.validateID(productID)
         if validation:
-            ID = Main_Program.IDExists(productID, current_inventory, 0)
+            ID = Main_Program.get_product(productID, current_inventory, 0)
             if ID != None:
                 return ID
             else:
