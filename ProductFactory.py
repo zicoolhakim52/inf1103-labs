@@ -6,7 +6,7 @@ from DigitalProduct import DigitalProduct
 class ProductFactory:
  @staticmethod
  def create(product_type: str, product_id: str, name: str, price: float,
-    stock_quantity: int, supplier: Supplier,unique_trait: float) -> Product:
+    stock_quantity: int, supplier: Supplier,unique_trait: float) -> Product | None:
     if product_type == "physical":
         return PhysicalProduct(product_id, name, price, stock_quantity,unique_trait,supplier)
     elif product_type == "digital":

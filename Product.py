@@ -25,7 +25,7 @@ class Product(ABC):
         self.__supplier = supplier
 
     @abstractmethod
-    def get_fulfilment_info() -> str:
+    def get_fulfilment_info():
         pass
 
     @abstractmethod
@@ -74,7 +74,6 @@ class Product(ABC):
                 value = float(input(prompt))
                 if value <= 0:
                     print("Please enter a number greater than zero.")
-                continue
                 return value
             except ValueError:
                 print("Please enter a valid number, e.g. 12.50")

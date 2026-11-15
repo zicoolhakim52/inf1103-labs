@@ -4,11 +4,12 @@ from OrderLine import OrderLine
 from Product import Product
 from Supplier import Supplier
 from ProductFactory import ProductFactory
+from Inventory import Inventory
 
 
 class File_Handling:
 
-    def load_inventory(current_inventory):
+    def load_inventory(current_inventory)->Inventory:
         try:
             inventoryFile = open("inventory.json", "r+")
             inventoryFile.close()
@@ -44,7 +45,7 @@ class File_Handling:
             print("Load attempt finished.")
         return current_inventory
 
-    def save_inventory(current_inventory, state):
+    def save_inventory(current_inventory, state)->None:
         if state == "Manual Save":
             print("Saving inventory...")
         else:
@@ -78,7 +79,7 @@ class File_Handling:
             print("Load attempt finished.")
         return supplier_list
 
-    def save_supplier(unique_supplier):
+    def save_supplier(unique_supplier)->None:
         supplier_list = []
         for supplier in unique_supplier:
             supplier_list.append(supplier.save_supplier())
@@ -109,7 +110,7 @@ class File_Handling:
         finally:
             print("Load attempt finished.")
         return order_list
-    def save_order(orderlist):
+    def save_order(orderlist)->None:
         formatted_orders = []
         for order in orderlist:
             order_dict = {}

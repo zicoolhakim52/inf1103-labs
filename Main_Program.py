@@ -5,6 +5,7 @@ from BulkDiscount import BulkDiscount
 from NoDiscount import NoDiscount
 from PercentageDiscount import PercentageDiscount
 from StudentDiscount import StudentDiscount
+from Product import Product
 class Main_Program:
 
     def display_menu():
@@ -21,7 +22,7 @@ class Main_Program:
             "----------------------------\n"
         )
 
-    def get_valid_input():
+    def get_valid_input()->str:
         input_Option = ""
         while type(input_Option) != int:
             try:
@@ -33,7 +34,7 @@ class Main_Program:
                 continue
         return input_Option
 
-    def get_valid_supplier_input():
+    def get_valid_supplier_input()-> str:
         input_Option = ""
         while type(input_Option) != int:
             try:
@@ -45,7 +46,7 @@ class Main_Program:
                 continue
         return input_Option
 
-    def get_valid_order_input():
+    def get_valid_order_input()->str:
         input_Option = ""
         while type(input_Option) != int:
             try:
@@ -57,7 +58,7 @@ class Main_Program:
                 continue
         return input_Option
 
-    def get_input_ID(userInput, current_inventory):
+    def get_input_ID(userInput, current_inventory)-> bool | Product:
         validateInputID = False
         while validateInputID == False:
             current_inventory.display_all()
@@ -79,7 +80,7 @@ class Main_Program:
                     else:
                         print("ID does not exists, Please enter another ID")
 
-    def validateID(productID):
+    def validateID(productID)->bool:
         if productID == "":
             print("Product ID cannot be empty")
             return False
@@ -101,14 +102,14 @@ class Main_Program:
                     print("Please input Pxxx where x is an integer")
                     return False
 
-    def IDExists(ID, current_inventory, userInput):
+    def IDExists(ID, current_inventory, userInput)->None | Product:
         search_result = current_inventory.search_product_by_ID(ID, userInput)
         if search_result == None:
             return None
         else:
             return search_result
 
-    def add_product(productID, current_inventory):
+    def add_product(productID, current_inventory)-> None:
         validation = Main_Program.validateID(productID)
         if validation:
             ID = Main_Program.IDExists(productID, current_inventory, 0)
@@ -118,13 +119,17 @@ class Main_Program:
                 print("ID does not exists, Please enter another ID")
 
 
-    def get_product_type():
+    def get_product_type()-> str:
         product_type = ""
-        while product_type.lower() != "physical" and product_type.lower() != "digital":
+        while True:
             product_type = input("Input product type: physical or digital: ")
+            if product_type.lower() != "physical" and product_type.lower() != "digital": 
+                print("Please enter physical or digital.")
+            else:
+                break
         return product_type
 
-    def get_product_price():
+    def get_product_price()-> float:
         validateInputPrice = False
         while validateInputPrice == False:
             productPrice = input("Price: ")
@@ -134,7 +139,7 @@ class Main_Program:
                 print("Price must be a int/float and more than 0. e.g. 12.50")
         return productPrice
 
-    def get_valid_stock():
+    def get_valid_stock()-> int:
         validateInputStock = False
         while validateInputStock == False:
             stockQuantity = input("Stock Quantity: ")
@@ -144,7 +149,7 @@ class Main_Program:
                 print("Stock must be an integer and more than 0. e.g. 10")
         return stockQuantity
 
-    def get_valid_digital_input():
+    def get_valid_digital_input()-> float:
         download_size_input = False
         while type(download_size_input) != float:
             download_size_input = input("Download file size in (GB): ")
@@ -154,7 +159,7 @@ class Main_Program:
                 print("Error: The input is not a valid float.")
         return download_size_input
 
-    def get_valid_weight_input():
+    def get_valid_weight_input()-> float:
         product_weight_input = False
         while type(product_weight_input) != float:
             product_weight_input = input("Enter weight of product in KG: ")
@@ -186,7 +191,7 @@ class Main_Program:
                 break
         return supplier
 
-    def input_supplier_id(supplier_id_list:list,supplier_list:list):
+    def input_supplier_id(supplier_id_list:list,supplier_list:list)-> None:
         while True:
             try:
                 supplierID = input("Enter Supplier ID: ")
@@ -198,13 +203,13 @@ class Main_Program:
             
         return supplierinfo
 
-    def get_order_id_list(orderlist):
+    def get_order_id_list(orderlist)-> list:
         order_id_list=[]
         for order in orderlist:
             order_id_list.append(order.get_id())
         return order_id_list
 
-    def get_order_input(order_id_list,orderlist):
+    def get_order_input(order_id_list,orderlist)-> None:
         while True:
             order_ID = input("Enter Order ID: ")
             if not order_ID.isdigit():
@@ -225,7 +230,7 @@ class Main_Program:
                 return order
         print("Order Not Found. Please Enter a valid ID")
         return False
-    def get_product_add_order(order_id_list,orderlist,current_inventory):
+    def get_product_add_order(order_id_list,orderlist,current_inventory)-> None:
         while True:
             order_id_list.append('0')
             userInputOrderID = input("Enter an order ID (or enter 0 to exit): ")
@@ -247,7 +252,7 @@ class Main_Program:
                 print("Exited")
                 break
 
-    def set_order_discount(order_id_list,orderlist):
+    def set_order_discount(order_id_list,orderlist)->None:
         while True:
             order_id_list.append('0')
             userInputOrderID = input("Enter an order ID (or enter 0 to exit): ")
@@ -282,7 +287,7 @@ class Main_Program:
                 order.set_discount(discount_strat[int(discount_input)-1])
                 break
             
-    def calulateOrder(order_id_list,orderlist):
+    def calulateOrder(order_id_list,orderlist) -> None:
         while True:
             order_id_list.append('0')
             userInputOrderID = input("Enter an order ID (or enter 0 to exit): ")

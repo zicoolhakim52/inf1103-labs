@@ -15,7 +15,7 @@ class Inventory:
         else:
             return False
 
-    def getproducts(self):
+    def getproducts(self) -> list[Product]:
         return self.products
 
     def inventory_list_func(self) -> list:
