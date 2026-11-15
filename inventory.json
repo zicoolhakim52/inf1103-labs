@@ -3,7 +3,7 @@
   "ID": "P001",
   "Name": "Laptop",
   "Price": 1000.0,
-  "Stock": 2,
+  "Stock": 10,
   "SupplierID": 1,
   "SupplierName": "Samsung",
   "SupplierEmail": "Samsung@email.com",
