@@ -19,11 +19,14 @@ class DigitalProduct(Product):
     def get_fulfilment_info(self) -> str:
         return "Product is delivered digitally"
 
+    def get_product_type(self) -> str:
+        return "digital"
+
     def display_information(self) -> None:
         super().display_information()
         print(f"Download size: {self._download_size}")
 
     def product_information(self) -> dict:
         product_dict = super().product_information()
-        product_dict["Download size"] = self._download_size
+        product_dict["uniqueTrait"] = self._download_size
         return product_dict

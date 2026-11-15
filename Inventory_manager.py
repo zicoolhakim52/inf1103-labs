@@ -5,6 +5,7 @@ from Main_Program import Main_Program
 from Order import Order
 from PhysicalProduct import PhysicalProduct
 from Supplier import Supplier
+from ProductFactory import ProductFactory
 
 
 def process_delivery(current_total, new_value):
@@ -40,36 +41,14 @@ def get_product_class(
     product_type,
     supplierinfo,
 ):
-    if product_type == "Digital":
-        download_size_input = Main_Program.get_valid_digital_input()
-        product = DigitalProduct(
-            search_item,
-            productName,
-            productPrice,
-            stockQuantity,
-            download_size_input,
-            supplierinfo,
-        )
+    if product_type.lower() == "digital":
+        unique_trait = Main_Program.get_valid_digital_input()
     else:
-        product_weight_input = Main_Program.get_valid_weight_input()
-        product = PhysicalProduct(
-            search_item,
-            productName,
-            productPrice,
-            stockQuantity,
-            product_weight_input,
-            supplierinfo,
-        )
+        unique_trait = Main_Program.get_valid_weight_input()
+        
+    product=ProductFactory.create(product_type.lower(),search_item,productName,productPrice,stockQuantity,supplierinfo,unique_trait)
     return product
 
-
-def order_exists(orderlist: list, orderID: str) -> Order | bool:
-    for order in orderlist:
-        if str(orderID) == str(order.order_id):
-            print("Order Found")
-            return order
-    print("Order Not Found. Please Enter a valid ID")
-    return False
 
 
 print(
@@ -77,50 +56,13 @@ print(
     "INVENTORY MANAGEMENT SYSTEM\n"
     "========================================"
 )
-inventoryQuantity = 0
-lastItemNumber = 0
+
+#Creating an inventory class
 current_inventory = Inventory()
-supplier_list = []
 
-loaded_inventory = File_Handling.load_inventory(inventoryQuantity)
-
-if loaded_inventory != "Empty":
-    for item in loaded_inventory[0]:
-        supplier_info = Supplier(
-            item["SupplierID"], item["SupplierName"], item["SupplierEmail"]
-        )
-        if "Download size" in item.keys():
-            product = DigitalProduct(
-                item["ID"],
-                item["Name"],
-                item["Price"],
-                item["Stock"],
-                item["Download size"],
-                supplier_info,
-            )
-        else:
-            product = PhysicalProduct(
-                item["ID"],
-                item["Name"],
-                item["Price"],
-                item["Stock"],
-                item["Weight"],
-                supplier_info,
-            )
-        current_inventory.add_product(product)
-    inventoryQuantity = int(loaded_inventory[1])
-    lastItemNumber = int(loaded_inventory[2])
-
-supplier_load = File_Handling.load_supplier()
-if len(supplier_load) != 0:
-    for supplier in supplier_load:
-        supplier_info = Supplier(
-            supplier["SupplierID"],
-            supplier["SupplierName"],
-            supplier["SupplierEmail"],
-        )
-        supplier_list.append(supplier_info)
-
+#Loading Inventory, supplier and order files
+current_inventory = File_Handling.load_inventory(current_inventory)
+supplier_list = File_Handling.load_supplier()
 orderlist = File_Handling.load_order(current_inventory)
 
 while True:
@@ -139,10 +81,13 @@ while True:
         productName = input("Product Name: ")
         productPrice = Main_Program.get_product_price()
         stockQuantity = Main_Program.get_valid_stock()
-        supplierID = input("Enter Supplier ID: ")
-        supplierName = input("Enter Supplier Name: ")
+        #display suppliers
+        Main_Program.get_supplier_list(supplier_list)
+        supplierinfo = Main_Program.input_supplier_id(Main_Program.get_supplier_id_list(supplier_list),supplier_list)
+        
+        '''supplierName = input("Enter Supplier Name: ")
         supplierEmail = input("Enter Supplier Email: ")
-        supplierinfo = Supplier(supplierID, supplierName, supplierEmail)
+        supplierinfo = Supplier(supplierID, supplierName, supplierEmail)'''
         product = get_product_class(
             search_item,
             productName,
@@ -164,15 +109,9 @@ while True:
         print("Current Stock: ", old_stock)
 
         new_stock = input("New Stock Quantity: ")
-        inventoryQuantity = inventoryQuantity + int(new_stock) - int(old_stock)
-        result = stockOverflow(inventoryQuantity)
-        if result == True:
-            item["Stock"] = new_stock
-            product_info.update_stock(new_stock)
-            print("\nStock updated successfully!\n")
-        else:
-            inventoryQuantity = inventoryQuantity - int(new_stock) + int(old_stock)
-            print("Quantity would go over 500. Item not added")
+        
+        product_info.update_stock(new_stock)
+        print("\nStock updated successfully!\n")
 
     elif userInput == 4:
         search_result = Main_Program.get_input_ID(userInput, current_inventory)
@@ -199,12 +138,7 @@ while True:
             )
             userInputSupplier = Main_Program.get_valid_supplier_input()
             if userInputSupplier == 1:
-                if len(supplier_list) != 0:
-                    for supplier in supplier_list:
-                        supplier.display_information()
-                        print("\n")
-                else:
-                    print("There are no suppliers information available")
+                Main_Program.get_supplier_list(supplier_list)
             elif userInputSupplier == 2:
                 supplierID = input("Enter Supplier ID: ")
                 supplierName = input("Enter Supplier Name: ")
@@ -229,27 +163,22 @@ while True:
             )
             userInputOrder = Main_Program.get_valid_order_input()
             if userInputOrder == 1:
-                print("---------- Orders ------------\n")
+                print("---------- Orders ------------")
                 if len(orderlist) == 0:
                     print("There are no orders.")
                 else:
                     for order in orderlist:
                         print("\nOrder ID:", order.order_id)
                         order.display_order()
+
             elif userInputOrder == 2:
-                order_ID = input("Enter Order ID: ")
-                order = Order(order_ID)
-                orderlist.append(order)
+                order_id_list=Main_Program.get_order_id_list(orderlist)
+                Main_Program.get_order_input(order_id_list,orderlist)
+
             elif userInputOrder == 3:
-                userInputOrderID = input("Enter an order ID: ")
-                order = order_exists(orderlist, userInputOrderID)
-                if order != False:
-                    product = Main_Program.get_input_ID(0, current_inventory)
-                    quantity = input("Please enter quantity: ")
-                    order.add_order_line(product, quantity)
-                    print("Product added!")
-                else:
-                    print("Product not added")
+                order_id_list=Main_Program.get_order_id_list(orderlist)
+                Main_Program.get_product_add_order(order_id_list,orderlist,current_inventory)
+                
             elif userInputOrder == 5:
                 File_Handling.save_order(orderlist)
                 break

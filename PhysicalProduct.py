@@ -20,6 +20,9 @@ class PhysicalProduct(Product, CanBeShipped):
     def get_fulfilment_info(self) -> str:
         return "Product requires physical shipping"
 
+    def get_product_type(self) -> str:
+        return "physical"
+
     def display_information(self) -> None:
         super().display_information()
         print(f"Weight: {self._weight}")
@@ -30,5 +33,5 @@ class PhysicalProduct(Product, CanBeShipped):
 
     def product_information(self) -> dict:
         product_dict = super().product_information()
-        product_dict["Weight"] = self._weight
+        product_dict["uniqueTrait"] = self._weight
         return product_dict

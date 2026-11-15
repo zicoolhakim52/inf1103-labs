@@ -10,9 +10,7 @@ from Supplier import Supplier
 
 class Order:
 
-    def __init__(
-        self, order_id: str, discount: DiscountStrategy = NoDiscount
-    ) -> None:
+    def __init__(self, order_id: str, discount: DiscountStrategy = NoDiscount) -> None:
         self.order_id: str = order_id
         self.order_lines: list[OrderLine] = []
         self.order_discount: float = discount
@@ -29,7 +27,7 @@ class Order:
         for product in self.order_lines:
             product.display_orderLine()
 
-    def set_discount(self, new_discount) -> None:
+    def set_discount(self, new_discount: DiscountStrategy) -> None:
         self.order_discount = new_discount
 
     def get_id(self) -> str:

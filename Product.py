@@ -14,12 +14,22 @@ class Product(ABC):
     ):
         self.__productid = product_id
         self.__name = name
-        self.__price = price
-        self.__stock = stock
+        if float(price)<=0:
+            raise ValueError("Price must be greater than zero.")
+        else:
+            self.__price = price
+        if int(stock)<=0:
+            raise ValueError("Stock must be greater than zero.")
+        else:
+            self.__stock = stock
         self.__supplier = supplier
 
     @abstractmethod
     def get_fulfilment_info() -> str:
+        pass
+
+    @abstractmethod
+    def get_product_type():
         pass
 
     def display_information(self) -> None:
@@ -57,3 +67,15 @@ class Product(ABC):
 
     def update_stock(self, new_stock: int) -> None:
         self.__stock = new_stock
+
+    def get_positive_float(prompt: str) -> float:
+        while True:
+            try:
+                value = float(input(prompt))
+                if value <= 0:
+                    print("Please enter a number greater than zero.")
+                continue
+                return value
+            except ValueError:
+                print("Please enter a valid number, e.g. 12.50")
+

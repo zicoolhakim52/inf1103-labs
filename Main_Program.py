@@ -1,3 +1,5 @@
+from Supplier import Supplier
+from Order import Order
 class Main_Program:
 
     def display_menu():
@@ -110,39 +112,31 @@ class Main_Program:
             else:
                 print("ID does not exists, Please enter another ID")
 
-    def validatePriceType(productPrice):
-        try:
-            productPrice = float(productPrice)
-            price = round(productPrice, 2)
-            return [True, price]
-        except:
-            print("Price must be a int/float")
-            return [False]
 
     def get_product_type():
-        product_type = False
-        while product_type != "Physical" and product_type != "Digital":
-            product_type = input("Input product type: Physical or Digital: ")
+        product_type = ""
+        while product_type.lower() != "physical" and product_type.lower() != "digital":
+            product_type = input("Input product type: physical or digital: ")
         return product_type
 
     def get_product_price():
         validateInputPrice = False
         while validateInputPrice == False:
             productPrice = input("Price: ")
-            validateInput = Main_Program.validatePriceType(productPrice)
-            if validateInput[0]:
-                productPrice = validateInput[1]
+            if float(productPrice) >0 and productPrice.isdigit():
                 validateInputPrice = True
+            else:
+                print("Price must be a int/float and more than 0. e.g. 12.50")
         return productPrice
 
     def get_valid_stock():
         validateInputStock = False
         while validateInputStock == False:
             stockQuantity = input("Stock Quantity: ")
-            if stockQuantity.isdigit():
+            if stockQuantity.isdigit() and int(stockQuantity)>0:
                 validateInputStock = True
             else:
-                print("Stock must be an integer")
+                print("Stock must be an integer and more than 0. e.g. 10")
         return stockQuantity
 
     def get_valid_digital_input():
@@ -164,3 +158,86 @@ class Main_Program:
             except:
                 print("Error: The input is not a valid float.")
         return product_weight_input
+
+    def get_supplier_list(supplier_list)-> None:
+        if len(supplier_list) != 0:
+            for supplier in supplier_list:
+                supplier.display_information()
+                print("\n")
+        else:
+            print("There are no suppliers information available")
+    def get_supplier_id_list(supplier_list:list) -> list | None:
+        if len(supplier_list) != 0:
+            supplier_id_list=[]
+            for supplier in supplier_list:
+                supplier_id_list.append(supplier.get_supplier_id())
+            return supplier_id_list
+        else:
+            print("There are no suppliers information available")        
+
+    def get_supplier_by_id(supplierID,supplier_list) -> Supplier:
+        for supplier in supplier_list:
+            if supplierID== supplier.get_supplier_id():
+                break
+        return supplier
+
+    def input_supplier_id(supplier_id_list:list,supplier_list:list):
+        while True:
+            try:
+                supplierID = input("Enter Supplier ID: ")
+            except int(supplierID)<0 or supplierID.isdigit() or supplierID not in supplier_id_list():
+                print("Please select a digit whitin the range of supplier ID")
+            else:
+                supplierinfo = Main_Program.get_supplier_by_id(supplierID,supplier_list)
+                break
+            
+        return supplierinfo
+
+    def get_order_id_list(orderlist):
+        order_id_list=[]
+        for order in orderlist:
+            order_id_list.append(order.get_id())
+        return order_id_list
+
+    def get_order_input(order_id_list,orderlist):
+        while True:
+            order_ID = input("Enter Order ID: ")
+            if not order_ID.isdigit():
+                print("ID must be a digit (1,2,3...)")
+            elif int(order_ID)<=0:
+                print("ID cannot be 0 or negative number")
+            elif order_ID in order_id_list:
+                print("ID already exists, please select another ID")
+            else:
+                order = Order(order_ID)
+                orderlist.append(order)
+                break
+    
+    def order_exists(orderlist: list, orderID: str) -> Order | bool:
+        for order in orderlist:
+            if str(orderID) == str(order.order_id):
+                print("Order Found")
+                return order
+        print("Order Not Found. Please Enter a valid ID")
+        return False
+    def get_product_add_order(order_id_list,orderlist,current_inventory):
+        while True:
+            order_id_list.append('0')
+            userInputOrderID = input("Enter an order ID (or enter 0 to exit): ")
+            if not userInputOrderID.isdigit():
+                print("Input must be digit")
+            elif userInputOrderID not in order_id_list:
+                print("Order Does not exist")
+            elif int(userInputOrderID)!=0:
+                order = Main_Program.order_exists(orderlist, userInputOrderID)
+                if order != False:
+                    product = Main_Program.get_input_ID(0, current_inventory)
+                    quantity = input("Please enter quantity: ")
+                    order.add_order_line(product, quantity)
+                    print("Product added!")
+                    break
+                else:
+                    print("Product not added")
+            else:
+                print("Exited")
+                break

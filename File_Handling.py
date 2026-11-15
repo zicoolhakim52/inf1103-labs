@@ -1,15 +1,14 @@
 import json
-from DigitalProduct import DigitalProduct
 from Order import Order
 from OrderLine import OrderLine
-from PhysicalProduct import PhysicalProduct
 from Product import Product
 from Supplier import Supplier
+from ProductFactory import ProductFactory
 
 
 class File_Handling:
 
-    def load_inventory(inventoryQuantity):
+    def load_inventory(current_inventory):
         try:
             inventoryFile = open("inventory.json", "r+")
             inventoryFile.close()
@@ -18,20 +17,32 @@ class File_Handling:
             with open("inventory.json", "r") as file:
                 file_contents = json.load(file)
 
-            for item in file_contents:
-                inventoryQuantity += int(item["Stock"])
-
-            lastItem = file_contents[-1]
-            lastItemID = lastItem["ID"]
-            lastItemID = int(lastItemID[-1])
-
-            print("Inventory loaded successfully.\n")
-            return [file_contents, inventoryQuantity, lastItemID]
-
-        except:
+        except FileNotFoundError: #Will create a file
+            print("File not found... Creating a file")
             inventoryFile = open("inventory.json", "w+")
             inventoryFile.close()
-            return "Empty"
+            return current_inventory
+        except json.JSONDecodeError:
+            print("File is empty\n")
+        else: #Continue running
+            #Reads file
+            if bool(file_contents):
+                for item in file_contents:
+                    supplier_info = Supplier(
+                        item["SupplierID"], item["SupplierName"], item["SupplierEmail"]
+                    )
+                    try:
+                        product=ProductFactory.create(item["Type"],item["ID"],item["Name"],float(item["Price"]),int(item["Stock"]),supplier_info,item["uniqueTrait"])
+                    except ValueError:
+                        print("Unknown product type or a price that is not a number")
+                        continue
+                    else:
+                        current_inventory.add_product(product)
+            print("Inventory loaded successfully.\n")
+        finally:
+
+            print("Load attempt finished.")
+        return current_inventory
 
     def save_inventory(current_inventory, state):
         if state == "Manual Save":
@@ -51,9 +62,21 @@ class File_Handling:
         try:
             with open("supplier.json", "r") as file:
                 file_contents = json.load(file)
-            return file_contents
-        except:
+            
+        except FileNotFoundError or json.JSONDecodeError:
             return []
+        else:
+            supplier_list=[]
+            for supplier in file_contents:
+                supplier_info = Supplier(
+                    supplier["SupplierID"],
+                    supplier["SupplierName"],
+                    supplier["SupplierEmail"],
+                )
+                supplier_list.append(supplier_info)
+        finally:
+            print("Load attempt finished.")
+        return supplier_list
 
     def save_supplier(unique_supplier):
         supplier_list = []
@@ -63,10 +86,16 @@ class File_Handling:
             json.dump(supplier_list, file, indent=1)
 
     def load_order(current_inventory) -> list[Order] | None:
+        order_list = []
         try:
             with open("order.json", "r") as file:
                 file_contents = json.load(file)
-            order_list = []
+        except FileNotFoundError:
+            orderFile = open("order.json", "w+")
+            orderFile.close()
+        except json.JSONDecodeError:
+            pass
+        else:
             for order in file_contents:
                 order1 = Order(order["OrderID"])
                 list_order_line = order["OrderLines"]
@@ -77,12 +106,9 @@ class File_Handling:
                             order1.add_order_line(product, order_line["quantity"])
                             break
                 order_list.append(order1)
-
-            return order_list
-        except:
-            orderFile = open("order.json", "w+")
-            orderFile.close()
-
+        finally:
+            print("Load attempt finished.")
+        return order_list
     def save_order(orderlist):
         formatted_orders = []
         for order in orderlist:

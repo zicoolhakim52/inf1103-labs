@@ -17,3 +17,9 @@ class Supplier:
             "SupplierName": self._name,
             "SupplierEmail": self._contact_email,
         }
+    def get_supplier_id(self) -> str:
+        return self._supplier_id
+
+    def get_supplier(self) -> Supplier:
+        return self
+    

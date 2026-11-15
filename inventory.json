@@ -7,7 +7,8 @@
   "SupplierID": 1,
   "SupplierName": "Samsung",
   "SupplierEmail": "Samsung@email.com",
-  "Weight": 1.5
+  "uniqueTrait": 1.5,
+  "Type": "physical"
  },
  {
   "ID": "P002",
@@ -17,7 +18,8 @@
   "SupplierID": 1,
   "SupplierName": "Samsung",
   "SupplierEmail": "Samsung@email.com",
-  "Weight": 1.7
+  "uniqueTrait": 1.7,
+  "Type": "physical"
  },
  {
   "ID": "P003",
@@ -27,36 +29,62 @@
   "SupplierID": 2,
   "SupplierName": "Steam",
   "SupplierEmail": "Steam@email.com",
-  "Download size": 10.5
+  "uniqueTrait": 10.5,
+  "Type": "digital"
  },
  {
   "ID": "P004",
   "Name": "Mickey Mouse toy",
   "Price": 1.0,
-  "Stock": "2",
+  "Stock": 2,
   "SupplierID": 3,
   "SupplierName": "Disney",
   "SupplierEmail": "Disney@email.com",
-  "Weight": 0.5
+  "uniqueTrait": 0.5,
+  "Type": "physical"
  },
  {
   "ID": "P005",
   "Name": "COD 4 MW",
   "Price": 100.0,
-  "Stock": "99",
+  "Stock": 99,
   "SupplierID": 4,
   "SupplierName": "Active Vision",
   "SupplierEmail": "AV@email.com",
-  "Download size": 200.0
+  "uniqueTrait": 200.0,
+  "Type": "digital"
  },
  {
   "ID": "P006",
   "Name": "GTA6",
   "Price": 999.0,
-  "Stock": "20",
+  "Stock": 20,
   "SupplierID": "5",
   "SupplierName": "Rockstar",
   "SupplierEmail": "RS@Email.com",
-  "Download size": 999.0
+  "uniqueTrait": 999.0,
+  "Type": "digital"
+ },
+ {
+  "ID": "P007",
+  "Name": "gta5",
+  "Price": 10.0,
+  "Stock": 10,
+  "SupplierID": "5",
+  "SupplierName": "r",
+  "SupplierEmail": "r@",
+  "uniqueTrait": 12.0,
+  "Type": "digital"
+ },
+ {
+  "ID": "P008",
+  "Name": "gta4",
+  "Price": 10.0,
+  "Stock": 80,
+  "SupplierID": "7",
+  "SupplierName": "Lenovo",
+  "SupplierEmail": "Lenovo@email.com",
+  "uniqueTrait": 90.0,
+  "Type": "digital"
  }
 ]

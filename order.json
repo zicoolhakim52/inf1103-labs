@@ -1,39 +1,13 @@
 [
  {
-  "OrderID": 1,
+  "OrderID": "1",
   "OrderLines": [
+   {
+    "productID": "P008",
+    "quantity": "10"
+   },
    {
     "productID": "P001",
-    "quantity": "2"
-   },
-   {
-    "productID": "P002",
-    "quantity": "2"
-   },
-   {
-    "productID": "P005",
-    "quantity": "2"
-   }
-  ]
- },
- {
-  "OrderID": 2,
-  "OrderLines": [
-   {
-    "productID": "P003",
-    "quantity": "2"
-   },
-   {
-    "productID": "P004",
-    "quantity": "2"
-   }
-  ]
- },
- {
-  "OrderID": "3",
-  "OrderLines": [
-   {
-    "productID": "P006",
     "quantity": "10"
    }
   ]

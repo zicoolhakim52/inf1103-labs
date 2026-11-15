@@ -21,7 +21,9 @@ class Inventory:
     def inventory_list_func(self) -> list:
         inventory_func_list = []
         for product in self.products:
-            inventory_func_list.append(product.product_information())
+            product_dict=product.product_information()
+            product_dict["Type"]= product.get_product_type()
+            inventory_func_list.append(product_dict)
         return inventory_func_list
 
     def add_product(self, product: Product) -> None:
