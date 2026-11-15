@@ -1,5 +1,10 @@
 from Supplier import Supplier
 from Order import Order
+from DiscountStrategy import DiscountStrategy
+from BulkDiscount import BulkDiscount
+from NoDiscount import NoDiscount
+from PercentageDiscount import PercentageDiscount
+from StudentDiscount import StudentDiscount
 class Main_Program:
 
     def display_menu():
@@ -45,7 +50,7 @@ class Main_Program:
         while type(input_Option) != int:
             try:
                 input_Option = int(input("Enter option: "))
-                if input_Option not in [1, 2, 3, 4, 5]:
+                if input_Option not in [1, 2, 3, 4, 5, 6]:
                     print("Invalid option, Please type an option that is displayed")
             except:
                 print("Invalid option, Please type an option that is displayed")
@@ -241,3 +246,59 @@ class Main_Program:
             else:
                 print("Exited")
                 break
+
+    def set_order_discount(order_id_list,orderlist):
+        while True:
+            order_id_list.append('0')
+            userInputOrderID = input("Enter an order ID (or enter 0 to exit): ")
+            if not userInputOrderID.isdigit():
+                print("Input must be digit")
+            elif userInputOrderID not in order_id_list:
+                print("Order Does not exist")
+            elif int(userInputOrderID)!=0:
+                order = Main_Program.order_exists(orderlist, userInputOrderID)
+                print("----------Discounts----------\n")
+                print("1.No discount\n2.Bulk Discount\n3.Percentage Discount\n4.Student Discount")
+                discount_range=[0,1,2,3,4]
+                discount_strat=[NoDiscount(),BulkDiscount(),PercentageDiscount(0.1),StudentDiscount()]
+                inputvalid=True
+                break
+                
+            else:
+                print("Exited")
+                inputvalid=False
+                break
+
+        while inputvalid:
+            discount_input = input("Enter Discount (or 0 to exit): ")
+            if not discount_input.isdigit():
+                print("Not a number. Please enter a digit from 1-4")
+            elif int(discount_input) not in discount_range:
+                print("Out of range. Please enter a digit from 1-4")
+            elif discount_input=="0":
+                print("Exited")
+                break
+            else:
+                order.set_discount(discount_strat[int(discount_input)-1])
+                break
+            
+    def calulateOrder(order_id_list,orderlist):
+        while True:
+            order_id_list.append('0')
+            userInputOrderID = input("Enter an order ID (or enter 0 to exit): ")
+            if not userInputOrderID.isdigit():
+                print("Input must be digit")
+            elif userInputOrderID not in order_id_list:
+                print("Order Does not exist")
+            elif int(userInputOrderID)!=0:
+                order = Main_Program.order_exists(orderlist, userInputOrderID)
+                price=order.calculate_total()
+                print(f"Total price for {order.get_id()} is {price}")
+                break
+                
+            else:
+                print("Exited")
+                break
+                
+            
+            

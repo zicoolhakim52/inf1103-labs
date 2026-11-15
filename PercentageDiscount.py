@@ -5,3 +5,6 @@ class PercentageDiscount(DiscountStrategy):
         
     def apply(self, total: float) -> float:
         return total * self._percentage
+
+    def print_self(self)-> str:
+        return("Percentage Discount")

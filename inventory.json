@@ -53,38 +53,5 @@
   "SupplierEmail": "AV@email.com",
   "uniqueTrait": 200.0,
   "Type": "digital"
- },
- {
-  "ID": "P006",
-  "Name": "GTA6",
-  "Price": 999.0,
-  "Stock": 20,
-  "SupplierID": "5",
-  "SupplierName": "Rockstar",
-  "SupplierEmail": "RS@Email.com",
-  "uniqueTrait": 999.0,
-  "Type": "digital"
- },
- {
-  "ID": "P007",
-  "Name": "gta5",
-  "Price": 10.0,
-  "Stock": 10,
-  "SupplierID": "5",
-  "SupplierName": "r",
-  "SupplierEmail": "r@",
-  "uniqueTrait": 12.0,
-  "Type": "digital"
- },
- {
-  "ID": "P008",
-  "Name": "gta4",
-  "Price": 10.0,
-  "Stock": 80,
-  "SupplierID": "7",
-  "SupplierName": "Lenovo",
-  "SupplierEmail": "Lenovo@email.com",
-  "uniqueTrait": 90.0,
-  "Type": "digital"
  }
 ]

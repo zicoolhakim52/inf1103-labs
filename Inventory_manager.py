@@ -157,8 +157,9 @@ while True:
                 "1. View Orders\n"
                 "2. Create Order\n"
                 "3. Add Product to Order\n"
-                "4. Calculate Order\n"
-                "5. Save and Exit\n"
+                "4. Set Discount to Order\n"
+                "5. Calculate Order\n"
+                "6. Save and Exit\n"
                 "----------------------------\n"
             )
             userInputOrder = Main_Program.get_valid_order_input()
@@ -168,7 +169,7 @@ while True:
                     print("There are no orders.")
                 else:
                     for order in orderlist:
-                        print("\nOrder ID:", order.order_id)
+                        print("\nOrder ID:", order.get_id(), order.print_discount())
                         order.display_order()
 
             elif userInputOrder == 2:
@@ -178,7 +179,14 @@ while True:
             elif userInputOrder == 3:
                 order_id_list=Main_Program.get_order_id_list(orderlist)
                 Main_Program.get_product_add_order(order_id_list,orderlist,current_inventory)
+            elif userInputOrder==4:
+                order_id_list=Main_Program.get_order_id_list(orderlist)
+                Main_Program.set_order_discount(order_id_list,orderlist)
+
+            elif userInputOrder==5:
+                order_id_list=Main_Program.get_order_id_list(orderlist)
+                Main_Program.calulateOrder(order_id_list,orderlist)
                 
-            elif userInputOrder == 5:
+            elif userInputOrder == 6:
                 File_Handling.save_order(orderlist)
                 break

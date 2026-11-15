@@ -5,7 +5,10 @@ class OrderLine:
 
     def __init__(self, product: Product, quantity: int):
         self.product = product
-        self.quantity = quantity
+        if int(quantity)<=0:
+            raise ValueError("Quantity must be greater than zero.")
+        else:
+            self.quantity = int(quantity)
 
     def calculate_subtotal(self) -> float:
         return self.product.getPrice() * self.quantity

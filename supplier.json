@@ -18,20 +18,5 @@
   "SupplierID": "4",
   "SupplierName": "Active Vision",
   "SupplierEmail": "AV@email.com"
- },
- {
-  "SupplierID": "5",
-  "SupplierName": "Rockstar",
-  "SupplierEmail": "RS@Email.com"
- },
- {
-  "SupplierID": "6",
-  "SupplierName": "hehe",
-  "SupplierEmail": "hehe@email"
- },
- {
-  "SupplierID": "7",
-  "SupplierName": "Lenovo",
-  "SupplierEmail": "Lenovo@email.com"
  }
 ]
