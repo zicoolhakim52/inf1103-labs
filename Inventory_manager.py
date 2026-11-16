@@ -65,6 +65,12 @@ current_inventory = File_Handling.load_inventory(current_inventory)
 supplier_list = File_Handling.load_supplier()
 orderlist = File_Handling.load_order(current_inventory)
 
+#Handling products.csv
+print("Attempting to load products.csv")
+inventory_products=Inventory()
+ikea_supplier=Supplier(10,"Ikea","Ikea@hotmail.sg")
+File_Handling.load_products("products.csv",inventory_products,ikea_supplier)
+
 while True:
     Main_Program.display_menu()
     userInput = Main_Program.get_valid_input()

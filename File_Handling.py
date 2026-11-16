@@ -1,4 +1,5 @@
 import json
+import csv
 from Order import Order
 from OrderLine import OrderLine
 from Product import Product
@@ -42,7 +43,7 @@ class File_Handling:
             print("Inventory loaded successfully.\n")
         finally:
 
-            print("Load attempt finished.")
+            print("Inventory Load attempt finished.")
         return current_inventory
 
     def save_inventory(current_inventory, state)->None:
@@ -76,7 +77,7 @@ class File_Handling:
                 )
                 supplier_list.append(supplier_info)
         finally:
-            print("Load attempt finished.")
+            print("Supplier Load attempt finished.")
         return supplier_list
 
     def save_supplier(unique_supplier)->None:
@@ -108,7 +109,7 @@ class File_Handling:
                             break
                 order_list.append(order1)
         finally:
-            print("Load attempt finished.")
+            print("Order Load attempt finished.")
         return order_list
     def save_order(orderlist)->None:
         formatted_orders = []
@@ -122,3 +123,24 @@ class File_Handling:
             formatted_orders.append(order_dict)
         with open("order.json", "w+") as file:
             json.dump(formatted_orders, file, indent=1)
+
+    def load_products(path: str, inventory: Inventory, supplier: Supplier) -> None:
+        try:
+            file = open(path, newline="")
+        except FileNotFoundError:
+            print(f"Products file not found: {path}")
+        else:
+            with file:
+                file_contents = csv.reader(file) # read rows with csv.reader and skip the header row
+                next(file_contents, None) #skips the first row in csv
+                for raw_resume in file_contents: # for each row: try to create and add the product,
+                    try:
+                        loaded=ProductFactory.create(raw_resume[0],raw_resume[1],raw_resume[2],float(raw_resume[3]),int(raw_resume[4]),supplier,"No Unique Trait")
+
+                    except ValueError:# except ValueError: report the row and continue
+                        print("Error detected while trying to load, skipping product...")
+                    else:
+                        print(f"{loaded} products loaded.")
+                        inventory.add_product(loaded)
+        finally:
+            print("Product Load attempt finished.")
