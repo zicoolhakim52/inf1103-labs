@@ -1,7 +1,9 @@
 FROM python:3.11-slim
 WORKDIR /app
-COPY inventory_manager.py .
-COPY inventory.json .
+
+COPY *.py .
+COPY *.json .
+COPY *.csv .
 CMD ["python", "inventory_manager.py"]
 ##docker mount and run
 ## docker run --rm -it -v "${PWD}:/usr/src/app" -w /usr/src/app python:3.11-slim python inventory_manager.py
